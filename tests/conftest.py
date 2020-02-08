@@ -1,19 +1,21 @@
 import pytest
 from flask_backend import create_app
 
-#scope of this module tests
+
+
+
 @pytest.fixture(scope='module')
 def test_client():
-    #create a test version of the app using /instance/flask_test.cfg
     flask_app = create_app('flask_test.cfg')
 
-    test_client = flask_app.test_client()
+    #create a test version of the app using /instance/flask_test.cfg using Werkzeug test Client
+    testing_client = flask_app.test_client()
 
     #establish app context before tests
+    ctx = flask_app.app_context()
+    ctx.push()
 
-    app_in_context = flask_app.app_context()
-    app_in_context.push()
+    yield testing_client  # this is where the testing happens!
 
-    yield test_client # testing begins here
+    ctx.pop()
 
-    app_in_context.pop()
