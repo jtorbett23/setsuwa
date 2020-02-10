@@ -16,7 +16,9 @@ export default class App extends Component {
     food: 'rice',
     username: null,
     password: null,
-    user_id: null
+    user_id: null,
+    loggedInMessage: false,
+    registerMessage: false
   }
 
   handleUsername (e) {
@@ -34,21 +36,46 @@ export default class App extends Component {
       "Access-Control-Allow-Headers": "Access-Control-Allow-Origin, Access-Control-Allow-Origin"
     }
 
-    axios.post(`http://localhost:5000/auth/login?username=${this.state.username}&password=${this.state.password}`, null, {headers: headers})
+    axios.post(`http://localhost:5000/auth/login?username=${this.state.username}&password=${this.state.password}`)
       .then(res => {
-        this.setState({user_id: res.data.user_id})
+        if(res.data.user_id) {
+          this.setState({user_id: res.data.user_id})
+          this.setState({loggedInMessage: "Logged in"})
+        }
+        if(res.data.message) {
+          this.setState({loggedInMessage: res.data.message})
+        }
+        console.log(res.data)
       })
   }
   
+  createUser() {
+    let headers = {
+      "Access-Control-Allow-Origin": "http://localhost:5000/",
+      "Access-Control-Allow-Methods": "GET, POST",
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Allow-Headers": "Access-Control-Allow-Origin, Access-Control-Allow-Origin"
+    }
+
+    axios.post(`http://localhost:5000/auth/register?username=${this.state.username}&password=${this.state.password}`)
+      .then(res => {
+        this.setState({registerMessage: res.data.message})
+        // this.setState({user_id: res.data.user_id})
+      })
+  }
 
   handleLogin(e) {
     e.preventDefault();
     this.getID()
   }
+  handleRegister(e) {
+    e.preventDefault();
+    this.createUser()
+  }
 
   componentDidUpdate() {
     console.log("woop")
-    
+    console.log(this.state.user_id)
   }
 
   render() {
@@ -94,7 +121,7 @@ export default class App extends Component {
 
           <Switch>
               <Route path="/login">
-                  <Login handleUsername={this.handleUsername.bind(this)} handlePassword={this.handlePassword.bind(this)} handleLogin={this.handleLogin.bind(this)}/>
+                  <Login handleUsername={this.handleUsername.bind(this)} handlePassword={this.handlePassword.bind(this)} handleLogin={this.handleLogin.bind(this)} handleRegister={this.handleRegister.bind(this)} loggedInMessage={this.state.loggedInMessage} registerMessage={this.state.registerMessage}/>
               </Route>
               <Route path="/users">
                   {/* <Users /> */}

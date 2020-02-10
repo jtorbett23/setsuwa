@@ -17,8 +17,10 @@ export default class Login extends Component {
                     </form>
                 </div>
 
+                <p>{this.props.loggedInMessage !== false ? this.props.loggedInMessage : null}</p>
+
                 <div className="Register">
-                    <form onSubmit={this.props.handleLogin}>
+                    <form onSubmit={this.props.handleRegister}>
                         <h4>Register</h4>
                         <label for="username">Username</label>
                         <input type="text" name="username" placeholder="username" onChange={this.props.handleUsername}></input>
@@ -29,6 +31,8 @@ export default class Login extends Component {
                         <input type="submit" value="Register" />
                     </form>
                 </div>
+
+                <p>{this.props.registerMessage !== false ? this.props.registerMessage : null}</p>
                 
             </div>
         )
