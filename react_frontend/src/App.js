@@ -60,7 +60,6 @@ export default class App extends Component {
     axios.post(`http://localhost:5000/auth/register?username=${this.state.username}&password=${this.state.password}`)
       .then(res => {
         this.setState({registerMessage: res.data.message})
-        // this.setState({user_id: res.data.user_id})
       })
   }
 
@@ -102,16 +101,16 @@ export default class App extends Component {
                           <Link to="/friends">Friends</Link>
                       </li>
                       <li>
-                          <Link to="/useracount">User account</Link>
+                          <Link to="/useraccount">User account</Link>
                       </li>
                       <li>
-                          <Link to="/">Logout</Link>
+                          <Link id="logout" to="/">Logout</Link>
                       </li>
                     </div>
                   }
                   {!this.state.loggedIn &&
                     <li>
-                        <Link to="/login">Login/Register</Link>
+                        <Link id="login" to="/login">Login/Register</Link>
                     </li>
                   }
               </ul>
@@ -121,7 +120,13 @@ export default class App extends Component {
 
           <Switch>
               <Route path="/login">
-                  <Login handleUsername={this.handleUsername.bind(this)} handlePassword={this.handlePassword.bind(this)} handleLogin={this.handleLogin.bind(this)} handleRegister={this.handleRegister.bind(this)} loggedInMessage={this.state.loggedInMessage} registerMessage={this.state.registerMessage}/>
+                  <Login 
+                  handleUsername={this.handleUsername.bind(this)} 
+                  handlePassword={this.handlePassword.bind(this)} 
+                  handleLogin={this.handleLogin.bind(this)} 
+                  handleRegister={this.handleRegister.bind(this)} 
+                  loggedInMessage={this.state.loggedInMessage} 
+                  registerMessage={this.state.registerMessage}/>
               </Route>
               <Route path="/users">
                   {/* <Users /> */}

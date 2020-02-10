@@ -17,7 +17,7 @@ export default class Login extends Component {
                     </form>
                 </div>
 
-                <p>{this.props.loggedInMessage !== false ? this.props.loggedInMessage : null}</p>
+                <p id="loginMsg">{this.props.loggedInMessage !== false ? this.props.loggedInMessage : null}</p>
 
                 <div className="Register">
                     <form onSubmit={this.props.handleRegister}>
@@ -32,7 +32,7 @@ export default class Login extends Component {
                     </form>
                 </div>
 
-                <p>{this.props.registerMessage !== false ? this.props.registerMessage : null}</p>
+                <p id="RegisterMsg">{this.props.registerMessage !== false ? this.props.registerMessage : null}</p>
                 
             </div>
         )
