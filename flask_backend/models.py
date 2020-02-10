@@ -15,11 +15,10 @@ class Login(db.Model):
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
-        # new_user = User(
-        #     self.user_id, 
-        #     self.username)
-        # db.session.add(new_user)
-        # db.session.commit()
+        new_user = User(
+            user_id = self.user_id, 
+            username = self.username)
+        new_user.save_to_db()
     #get user by username
     @classmethod
     def find_by_username(cls, username):
@@ -45,6 +44,10 @@ class User(db.Model):
         self.username = username
         self.moderator = False
         self.private = False
+    
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
 
 
 class Post(db.Model):
