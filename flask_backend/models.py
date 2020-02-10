@@ -45,16 +45,62 @@ class User(db.Model):
         self.moderator = False
         self.private = False
     
+    #get user by id
+    @classmethod
+    def find_by_id(cls, user_id):
+        return cls.query.filter_by(user_id = user_id).first()
+
+    def to_object(self):
+        return {
+            "user_id": self.user_id,
+            "username": self.username,
+            "moderator": self.moderator,
+            "private": self.private,
+        }
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
-
-
+    
 class Post(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     title = db.Column(db.String(80), nullable=False)
     content = db.Column(db.String(500), nullable=False)
     popularity = db.Column(db.Integer, default=0)
+    tag = db.Column(db.String, nullable=False)
+    created = db.Column(db.DateTime, default=datetime.utcnow)
     flagged = db.Column(db.Integer, default=False)
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    #get post by id
+    @classmethod
+    def find_by_id(cls, id):
+        return cls.query.filter_by(post_id = id).first()
+
+    #get 10 post by popularity
+    @classmethod
+    def find_popular(cls):
+        return cls.query.limit(10).all().order_by(cls.popularity.amount.desc())
+
+    #get posts by tag in order of popularity
+    @classmethod
+    def find_popular(cls, tag_name):
+        return cls.query.filter_by(tag = tag_name).all().order_by(cls.popularity.amount.desc())
+    
+    # #get 10 newest posts
+    # @classmethod
+    # def find_new(cls):
+    #     return cls.query.limit(10).all()
+    
+    # #get 10 oldest posts
+    # @classmethod
+    # def find_old(cls):
+    #     return cls.query.limit(10).all()
+
+    
+
 

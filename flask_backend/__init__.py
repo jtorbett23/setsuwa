@@ -10,7 +10,7 @@ from flask_bcrypt import Bcrypt
 db = SQLAlchemy()
 auth_api = Api()
 bcrypt = Bcrypt()
-# db_api = Api()
+db_api = Api()
 
 
 # app factory func
@@ -31,9 +31,9 @@ def initialise_extensions(app):
     bcrypt.init_app(app)
     db.init_app(app) #set up db
     from flask_backend import auth
-    # from flask_backend import database
+    from flask_backend import database
     auth_api.init_app(app)
-    # db_api.init_app(app)
+    db_api.init_app(app)
     import flask_backend.models #db model
     with app.app_context():
         db.create_all()
