@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -15,14 +15,18 @@ db_api = Api()
 
 # app factory func
 def create_app(config_filename=None):
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, static_folder='../react_frontend/build/static', template_folder='../react_frontend/build')
     app.config.from_pyfile(config_filename)
     
     initialise_extensions(app)
     # test app can run 
-    @app.route('/')
+    @app.route('/running')
     def test():
         return "app is running"
+        
+    @app.route('/')
+    def react():
+        return render_template('index.html')
     return app
 
 # helper func
