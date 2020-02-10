@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-
+from flask_cors import CORS
 
 
 # defined in global scope, but without any arguments passed in. 
@@ -34,6 +34,7 @@ def initialise_extensions(app):
     # app instance created set up extensions
     bcrypt.init_app(app)
     db.init_app(app) #set up db
+    CORS(app, resources={r"/auth/*": {"origins": "*"}})
     from flask_backend import auth
     from flask_backend import database
     auth_api.init_app(app)

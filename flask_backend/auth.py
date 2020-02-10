@@ -17,7 +17,7 @@ class Register_User(Resource):
         )
         try:
             new_user.save_to_db()
-            return {"message" : "user saved to db"}, 200
+            return {"message" : data['username'] + " has been created"}, 200
         except:
             return {'message': 'Something went wrong'}, 500
 
@@ -27,11 +27,11 @@ class Login_User(Resource):
         current_user = Login.find_by_username(data['username'])
         if not current_user:
             return {'message': 'User {} doesn\'t exist'.format(data['username'])}
-        
         if current_user.is_correct_password(data['password']):
             return {"user_id": current_user.user_id}
         else:
             return {'message': 'Wrong credentials'}
+
 
 auth_api.add_resource(Register_User,"/auth/register")
 auth_api.add_resource(Login_User,"/auth/login")
