@@ -81,7 +81,7 @@ def test_invalid_logout_access(test_client, init_database):
     assert response_obj == {'msg': 'Missing Authorization Header'}
 
 #logout refresh token route
-def test_valid_logout_access(test_client, init_database):
+def test_valid_logout_refresh(test_client, init_database):
     jwt_tokens = get_jwt_tokens(test_client)
     auth_header={'Authorization': 'Bearer '+jwt_tokens['refresh_token']}
     response = test_client.post('/auth/logoutRefresh', headers=auth_header)
@@ -90,11 +90,27 @@ def test_valid_logout_access(test_client, init_database):
     assert response_obj == {'message': 'Refresh token has been revoked'}
 
 
-def test_invalid_logout_access(test_client, init_database):
+def test_invalid_logout_refresh(test_client, init_database):
     response = test_client.post('/auth/logoutRefresh')
     assert response.status_code == 401
     response_obj = json.loads(response.data)
     assert response_obj == {'msg': 'Missing Authorization Header'}
 
-    
+#token refresh route
+def test_valid_refresh(test_client, init_database):
+    jwt_tokens = get_jwt_tokens(test_client)
+    auth_header={'Authorization': 'Bearer '+jwt_tokens['refresh_token']}
+    response = test_client.post('/auth/refresh', headers=auth_header)
+    assert response.status_code == 200
+    response_obj = json.loads(response.data)
+    #dynamic values so test they exist
+    assert response_obj['access_token'] != None
 
+
+def test_invalid_refresh(test_client, init_database):
+    response = test_client.post('/auth/refresh')
+    assert response.status_code == 401
+    response_obj = json.loads(response.data)
+    assert response_obj == {'msg': 'Missing Authorization Header'}
+
+    
