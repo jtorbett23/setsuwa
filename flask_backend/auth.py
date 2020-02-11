@@ -46,7 +46,7 @@ class Logout_Access(Resource):
     def post(self):
         jti = get_raw_jwt()['jti']
         try:
-            revoked_token = RevokedTokenModel(jti = jti)
+            revoked_token = Revoked_Token(jti = jti)
             revoked_token.save_to_db()
             return {'message': 'Access token has been revoked'}, 200
         except:
@@ -58,13 +58,15 @@ class Logout_Refresh(Resource):
     @jwt_refresh_token_required
     def post(self):
         jti = get_raw_jwt()['jti']
-        try:
-            revoked_token = RevokedTokenModel(jti = jti)
-            revoked_token.save_to_db()
-            return {'message': 'Refresh token has been revoked'}, 200
-        except:
-            db.session.close()
-            return {'message': 'Something went wrong'}, 500
+        
+        # try:
+            # revoked_token = Revoked_Token(jti = jti)
+            # revoked_token.save_to_db()   
+            
+            #  return {'message': 'Refresh token has been revoked'}, 200
+        # except:
+        #     db.session.close()
+        #     return {'message': 'Something went wrong'}, 500
       
       
 class Token_Refresh(Resource):

@@ -50,9 +50,35 @@ def test_invalid_login(test_client, init_database):
     response_obj = json.loads(response.data)
     #dynamic values so test they exist
     assert response_obj == {'message': 'Incorrect username/password'}
+
     #invalid password
     response = test_client.post('/auth/login?username=test1&password=pass')
     assert response.status_code == 500
     response_obj = json.loads(response.data)
     #dynamic values so test they exist
     assert response_obj == {'message': 'Incorrect username/password'}
+
+#get access and refresh tokens
+def get_jwt_tokens(client):
+    response = client.post('/auth/login?username=test&password=pass')
+    response_obj = json.loads(response.data)
+    return response_obj
+
+#logout access token route
+def test_valid_logout_access(test_client, init_database):
+    jwt_tokens = get_jwt_tokens(test_client)
+    auth_header={'Authorization': 'Bearer '+jwt_tokens['access_token']}
+    response = test_client.post('/auth/logoutAccess', headers=auth_header)
+    assert response.status_code == 200
+    response_obj = json.loads(response.data)
+    assert response_obj == {'message': 'Access token has been revoked'}
+
+
+def test_invalid_logout_access(test_client, init_database):
+    response = test_client.post('/auth/logoutAccess')
+    assert response.status_code == 401
+    response_obj = json.loads(response.data)
+    assert response_obj == {'msg': 'Missing Authorization Header'}
+
+    
+
