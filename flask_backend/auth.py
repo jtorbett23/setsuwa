@@ -4,19 +4,19 @@ from flask_backend import auth_api, db
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
 parser = reqparse.RequestParser()
-parser.add_argument('username', help = 'This field cannot be blank', required = True)
-parser.add_argument('password', help = 'This field cannot be blank', required = True)
+parser.add_argument('username', help = 'This field cannot be blank')
+parser.add_argument('password', help = 'This field cannot be blank')
 
 class Register_User(Resource):
     def post(self):
         data = parser.parse_args()
         if Login.find_by_username(data['username']):
-            return {'message': 'User {} already exists'. format(data['username'])}    
-        new_user = Login(
-            username = data['username'],
-            plaintext_password = data['password']
-        )
+            db.session.close()
+            return {'message': 'User {} already exists'. format(data['username'])},500    
         try:
+            new_user = Login(
+            username = data['username'],
+            plaintext_password = data['password'])
             new_user.save_to_db()
             return {"message" : data['username'] + " has been created"}, 200
         except:

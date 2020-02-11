@@ -17,7 +17,7 @@ class User_Access(Resource):
         data = parser.parse_args() 
         try:
             return_user = User.find_by_id(data['user_id'])
-            return jsonify(Return_user.to_object())
+            return jsonify(return_user.to_object())
         except:
             return {"message": "request failed"}, 500
 
