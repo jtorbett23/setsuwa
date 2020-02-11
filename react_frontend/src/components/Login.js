@@ -7,32 +7,32 @@ export default class Login extends Component {
                 <div className="login">
                     <form onSubmit={this.props.handleLogin}>
                         <h4>Login</h4>
-                        <label for="username">Username</label>
+                        <label htmlFor="username">Username</label>
                         <input type="text" name="username" placeholder="username" onChange={this.props.handleUsername}></input>
                         <br/>
-                        <label for="password">Password</label>
-                        <input type="text" name="password" placeholder="password" onChange={this.props.handlePassword}></input>
+                        <label htmlFor="password">Password</label>
+                        <input type="password" name="password" placeholder="password" onChange={this.props.handlePassword}></input>
                         <br/>
                         <input type="submit" value="Login" />
                     </form>
+                <p id="loginMsg">{this.props.logInMessage !== false ? this.props.logInMessage : null}</p>
                 </div>
 
-                <p id="loginMsg">{this.props.loggedInMessage !== false ? this.props.loggedInMessage : null}</p>
+                <p>Dont have an account? Create one <a href='/register'>here</a></p>
 
-                <div className="Register">
+                {/* <div className="Register">
                     <form onSubmit={this.props.handleRegister}>
                         <h4>Register</h4>
-                        <label for="username">Username</label>
+                        <label htmlFor="username">Username</label>
                         <input type="text" name="username" placeholder="username" onChange={this.props.handleUsername}></input>
                         <br/>
-                        <label for="password">Password</label>
-                        <input type="text" name="password" placeholder="password" onChange={this.props.handlePassword}></input>
+                        <label htmlFor="password">Password</label>
+                        <input type="password" name="password" placeholder="password" onChange={this.props.handlePassword}></input>
                         <br/>
                         <input type="submit" value="Register" />
                     </form>
-                </div>
-
-                <p id="RegisterMsg">{this.props.registerMessage !== false ? this.props.registerMessage : null}</p>
+                {this.props.registerPayload.status === 200 ? this.show() : <p id="RegisterMsg">{this.props.registerPayload.data.message}</p>} 
+                </div> */}
                 
             </div>
         )

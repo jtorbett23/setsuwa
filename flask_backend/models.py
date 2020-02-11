@@ -34,6 +34,7 @@ class Login(db.Model):
 
 class Revoked_Token(db.Model):
     __tablename__ = 'revoked_tokens'
+    __bind_key__ = 'auth'
     id = db.Column(db.Integer, primary_key = True)
     jti = db.Column(db.String(120))
     
@@ -53,7 +54,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True)
     moderator = db.Column(db.Boolean, default=False)
     private = db.Column(db.Boolean, default=False)
-    posts = db.relationship('Post', backref='user', lazy=False)
+    posts = db.relationship('Blog', backref='user', lazy=False)
 
     def __int__(self, user_id, username):
         self.user_id = user_id
@@ -78,15 +79,36 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
     
-class Post(db.Model):
+class Blog(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     title = db.Column(db.String(80), nullable=False)
     content = db.Column(db.String(500), nullable=False)
     popularity = db.Column(db.Integer, default=0)
     tag = db.Column(db.String, nullable=False)
-    created = db.Column(db.DateTime, default=datetime.utcnow)
+    created = db.Column(db.DateTime, default=datetime.today())
     flagged = db.Column(db.Integer, default=False)
+
+    def __init__(self, user_id, title, content, tag, created=datetime.today()):
+        self.user_id = user_id
+        self.title = title
+        self.content = content
+        self.tag = tag
+        self.created = created
+        self.popularity = 0
+        self.flagged = False
+
+    def to_object(self):
+        return {
+            "post_id": self.post_id,
+            "user_id": self.user_id,
+            "title": self.title,
+            "content": self.content,
+            "popularity": self.popularity,
+            "tag": self.tag,
+            "created": self.created,
+            "flagged": self.flagged,
+        }
 
     def save_to_db(self):
         db.session.add(self)
