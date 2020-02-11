@@ -88,6 +88,15 @@ class Post(db.Model):
     created = db.Column(db.DateTime, default=datetime.utcnow)
     flagged = db.Column(db.Integer, default=False)
 
+    def __init__(self, user_id, title, content, tag):
+        self.user_id = user_id
+        self.title = title
+        self.content = content
+        self.tag = tag
+        self.created = datetime.utcnow
+        self.popularity = 0
+        self.flagged = False
+        
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
