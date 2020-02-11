@@ -8,7 +8,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('id', help = 'This field cannot be blank')
 
 class User_Access(Resource):
-    @jwt_required
+    # @jwt_required -> commented out for development
     def get(self):
         data = parser.parse_args() 
         try:

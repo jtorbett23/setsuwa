@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse 
-from flask_backend.models import Login
+from flask_backend.models import Login, Revoked_Token
 from flask_backend import auth_api
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
@@ -7,7 +7,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('username', help = 'This field cannot be blank', required = True)
 parser.add_argument('password', help = 'This field cannot be blank', required = True)
 
-class Register_User(Resource):
+class Register(Resource):
     def post(self):
         data = parser.parse_args()
         if Login.find_by_username(data['username']):
@@ -22,7 +22,7 @@ class Register_User(Resource):
         except:
             return {'message': 'Something went wrong'}, 500
 
-class Login_User(Resource):
+class Login(Resource):
     def post(self):
         data = parser.parse_args()
         current_user = Login.find_by_username(data['username'])
@@ -39,9 +39,41 @@ class Login_User(Resource):
         else:
             return {'message': 'Wrong credentials'}
 
-
-auth_api.add_resource(Register_User,"/auth/register")
-auth_api.add_resource(Login_User,"/auth/login")
-
-
+class Logout_Access(Resource):
+    @jwt_required
+    def post(self):
+        jti = get_raw_jwt()['jti']
+        try:
+            revoked_token = RevokedTokenModel(jti = jti)
+            revoked_token.save_to_db()
+            return {'message': 'Access token has been revoked'}
+        except:
+            return {'message': 'Something went wrong'}, 500
       
+      
+class Logout_Refresh(Resource):
+    @jwt_refresh_token_required
+    def post(self):
+        jti = get_raw_jwt()['jti']
+        try:
+            revoked_token = RevokedTokenModel(jti = jti)
+            revoked_token.save_to_db()
+            return {'message': 'Refresh token has been revoked'}
+        except:
+            return {'message': 'Something went wrong'}, 500
+      
+      
+class Token_Refresh(Resource):
+    @jwt_refresh_token_required
+    def post(self):
+        current_user = get_jwt_identity()
+        access_token = create_access_token(identity = current_user)
+        return {'access_token': access_token}
+
+auth_api.add_resource(Register,"/auth/register")
+auth_api.add_resource(Login,"/auth/login")
+auth_api.add_resource(Token_Refresh,"/auth/refresh")
+auth_api.add_resource(Logout_Access,"/auth/logoutAccess")
+auth_api.add_resource(Logout_Refresh,"/auth/logoutRefresh")
+
+
