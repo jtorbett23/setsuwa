@@ -31,3 +31,28 @@ def test_valid_registration(test_client, init_database):
     assert response.status_code == 500
     response_obj = json.loads(response.data)
     assert response_obj  == {'message': 'Something went wrong'}
+
+
+#test login
+def test_valid_login(test_client, init_database):
+    response = test_client.post('/auth/login?username=test&password=pass')
+    assert response.status_code == 200
+    response_obj = json.loads(response.data)
+    #dynamic values so test they exist
+    assert response_obj['access_token'] != None
+    assert response_obj['refresh_token'] != None
+    assert response_obj['user_id'] == 1
+
+def test_invalid_login(test_client, init_database):
+    #invalid password
+    response = test_client.post('/auth/login?username=test&password=pass1')
+    assert response.status_code == 500
+    response_obj = json.loads(response.data)
+    #dynamic values so test they exist
+    assert response_obj == {'message': 'Incorrect username/password'}
+    #invalid password
+    response = test_client.post('/auth/login?username=test1&password=pass')
+    assert response.status_code == 500
+    response_obj = json.loads(response.data)
+    #dynamic values so test they exist
+    assert response_obj == {'message': 'Incorrect username/password'}

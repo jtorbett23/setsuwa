@@ -28,18 +28,18 @@ class Login_User(Resource):
         data = parser.parse_args()
         current_user = Login.find_by_username(data['username'])
         if not current_user:
-            return {'message': 'User {} doesn\'t exist'.format(data['username'])}
+            return {'message': 'Incorrect username/password'}, 500
         if current_user.is_correct_password(data['password']):
             access_token = create_access_token(identity = data['username'])
             refresh_token = create_refresh_token(identity = data['username'])
             return {
-                "user_id": current_user.user_id,
+                'user_id': current_user.user_id,
                 'access_token': access_token,
                 'refresh_token': refresh_token
-            }
+            }, 200
         else:
             db.session.close()
-            return {'message': 'Wrong credentials'}
+            return {'message': 'Incorrect username/password'}, 500
 
 class Logout_Access(Resource):
     @jwt_required
@@ -48,7 +48,7 @@ class Logout_Access(Resource):
         try:
             revoked_token = RevokedTokenModel(jti = jti)
             revoked_token.save_to_db()
-            return {'message': 'Access token has been revoked'}
+            return {'message': 'Access token has been revoked'}, 200
         except:
             db.session.close()
             return {'message': 'Something went wrong'}, 500
@@ -61,7 +61,7 @@ class Logout_Refresh(Resource):
         try:
             revoked_token = RevokedTokenModel(jti = jti)
             revoked_token.save_to_db()
-            return {'message': 'Refresh token has been revoked'}
+            return {'message': 'Refresh token has been revoked'}, 200
         except:
             db.session.close()
             return {'message': 'Something went wrong'}, 500
@@ -72,7 +72,7 @@ class Token_Refresh(Resource):
     def post(self):
         current_user = get_jwt_identity()
         access_token = create_access_token(identity = current_user)
-        return {'access_token': access_token}
+        return {'access_token': access_token}, 200
 
 auth_api.add_resource(Register_User,"/auth/register")
 auth_api.add_resource(Login_User,"/auth/login")
