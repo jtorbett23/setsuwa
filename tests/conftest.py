@@ -1,6 +1,6 @@
 import pytest
 from flask_backend import create_app, db
-from flask_backend.models import Login, User, Blog
+from flask_backend.models import Login, Blog, Revoked_Token
 from datetime import datetime 
 
 @pytest.fixture(scope='module')
