@@ -1,7 +1,7 @@
 import pytest
 from flask_backend import create_app, db
-# from flask_backend.models import Login, User, Post
-
+from flask_backend.models import Login, User, Blog
+from datetime import datetime 
 
 @pytest.fixture(scope='module')
 def test_client():
@@ -18,18 +18,21 @@ def test_client():
 
     ctx.pop()
 
-# @pytest.fixture(scope='module')
-# def init_database():
-#     # Create the database and the database table
-#     db.create_all()
-#     db.create_all(bind=["auth"])
+@pytest.fixture(scope='module')
+def init_database():
+    # Create the databases and the database tables
+    db.create_all()
+    db.create_all(bind=["auth"]) 
 
-#     #Create and Insert user data
+    # Insert user data
+    new_user = Login("test","pass")
+    new_user.save_to_db()
+    new_blog = Blog(1,"Faker 123", "Donald trump nukes brazil", "party", datetime(2020, 5, 17))
+    new_blog.save_to_db()
+
+    yield db  # this is where the testing happens!
     
-#     # Commit the changes for the users
-#     # db.session.commit()
-
-#     yield db  # this is where the testing happens!
-
-#     db.drop_all()
+    #clear databases
+    db.drop_all()
+    db.drop_all(bind=["auth"])
 

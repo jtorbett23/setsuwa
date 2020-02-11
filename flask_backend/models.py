@@ -89,12 +89,12 @@ class Blog(db.Model):
     created = db.Column(db.DateTime, default=datetime.today())
     flagged = db.Column(db.Integer, default=False)
 
-    def __init__(self, user_id, title, content, tag):
+    def __init__(self, user_id, title, content, tag, created=datetime.today()):
         self.user_id = user_id
         self.title = title
         self.content = content
         self.tag = tag
-        self.created = datetime.today()
+        self.created = created
         self.popularity = 0
         self.flagged = False
 
