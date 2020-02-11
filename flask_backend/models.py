@@ -31,6 +31,22 @@ class Login(db.Model):
     def is_correct_password(self, plaintext_password):
         return bcrypt.check_password_hash(self.password, plaintext_password)
 
+
+class Revoked_Token(db.Model):
+    __tablename__ = 'revoked_tokens'
+    id = db.Column(db.Integer, primary_key = True)
+    jti = db.Column(db.String(120))
+    
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    @classmethod
+    def is_jti_blacklisted(cls, jti):
+        query = cls.query.filter_by(jti = jti).first()
+        return bool(query)
+
+
 #Content DB
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
