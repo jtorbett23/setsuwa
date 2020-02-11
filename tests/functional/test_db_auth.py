@@ -80,5 +80,21 @@ def test_invalid_logout_access(test_client, init_database):
     response_obj = json.loads(response.data)
     assert response_obj == {'msg': 'Missing Authorization Header'}
 
+#logout refresh token route
+def test_valid_logout_access(test_client, init_database):
+    jwt_tokens = get_jwt_tokens(test_client)
+    auth_header={'Authorization': 'Bearer '+jwt_tokens['refresh_token']}
+    response = test_client.post('/auth/logoutRefresh', headers=auth_header)
+    assert response.status_code == 200
+    response_obj = json.loads(response.data)
+    assert response_obj == {'message': 'Refresh token has been revoked'}
+
+
+def test_invalid_logout_access(test_client, init_database):
+    response = test_client.post('/auth/logoutRefresh')
+    assert response.status_code == 401
+    response_obj = json.loads(response.data)
+    assert response_obj == {'msg': 'Missing Authorization Header'}
+
     
 
