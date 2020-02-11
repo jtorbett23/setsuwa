@@ -7,7 +7,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('username', help = 'This field cannot be blank', required = True)
 parser.add_argument('password', help = 'This field cannot be blank', required = True)
 
-class Register(Resource):
+class Register_User(Resource):
     def post(self):
         data = parser.parse_args()
         if Login.find_by_username(data['username']):
@@ -22,7 +22,7 @@ class Register(Resource):
         except:
             return {'message': 'Something went wrong'}, 500
 
-class Login(Resource):
+class Login_User(Resource):
     def post(self):
         data = parser.parse_args()
         current_user = Login.find_by_username(data['username'])
@@ -70,8 +70,8 @@ class Token_Refresh(Resource):
         access_token = create_access_token(identity = current_user)
         return {'access_token': access_token}
 
-auth_api.add_resource(Register,"/auth/register")
-auth_api.add_resource(Login,"/auth/login")
+auth_api.add_resource(Register_User,"/auth/register")
+auth_api.add_resource(Login_User,"/auth/login")
 auth_api.add_resource(Token_Refresh,"/auth/refresh")
 auth_api.add_resource(Logout_Access,"/auth/logoutAccess")
 auth_api.add_resource(Logout_Refresh,"/auth/logoutRefresh")

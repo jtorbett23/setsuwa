@@ -38,4 +38,4 @@ class Post(Resource):
         
 
 db_api.add_resource(User_Access,"/db/user")
-db_api.add_resource(Post,"db/post")
+db_api.add_resource(Post,"/db/post")
