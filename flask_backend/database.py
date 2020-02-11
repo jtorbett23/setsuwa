@@ -42,6 +42,6 @@ class Post(Resource):
         except:
             db.session.close()
             return {"message": "Retrieve post failed"}, 500
-        
+            
 db_api.add_resource(User_Access,"/db/user")
 db_api.add_resource(Post,"/db/post")

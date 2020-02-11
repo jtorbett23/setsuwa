@@ -11,8 +11,10 @@ class Register_User(Resource):
     def post(self):
         data = parser.parse_args()
         if Login.find_by_username(data['username']):
+
             db.session.close()
-            return {'message': 'User {} already exists'. format(data['username'])},500    
+            return {'message': 'User {} already exists'. format(data['username'])},400    
+
         try:
             new_user = Login(
             username = data['username'],
@@ -29,6 +31,7 @@ class Login_User(Resource):
         current_user = Login.find_by_username(data['username'])
         if not current_user:
             return {'message': 'Incorrect username/password'}, 500
+
         if current_user.is_correct_password(data['password']):
             access_token = create_access_token(identity = data['username'])
             refresh_token = create_refresh_token(identity = data['username'])
