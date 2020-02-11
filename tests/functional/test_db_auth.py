@@ -20,7 +20,7 @@ def test_valid_registration(test_client, init_database):
 def test_already_registered(test_client, init_database):
     #user already exists
     response = test_client.post('/auth/register?username=test&password=abc')
-    assert response.status_code == 500
+    assert response.status_code == 400
     response_obj = json.loads(response.data)
     assert response_obj  == {'message': 'User test already exists'}
 
