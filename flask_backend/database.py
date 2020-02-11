@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse 
 from flask_backend.models import User, Blog
-from flask_backend import db_api
+from flask_backend import db_api,db
 from flask import jsonify
 from flask_jwt_extended import jwt_required
 
@@ -25,13 +25,13 @@ class Post(Resource):
     # @jwt_required -> commented out for development
     def post(self):
         data = parser.parse_args()
-        new_blog = Blog(data['user_id'],data['title'],data['content'],data['tag'])
-        new_blog.save_to_db()
         try:
-            
+            new_blog = Blog(data['user_id'],data['title'],data['content'],data['tag'])
+            new_blog.save_to_db()
             return {"message" :"Post created",
                     "post_id": new_blog.post_id},200
         except:
+            db.session.close()
             return {"message": "Create post failed"}, 500
 
     def get(self):
@@ -40,6 +40,7 @@ class Post(Resource):
             return_blog = Blog.find_by_id(data['post_id'])
             return jsonify(return_blog.to_object())
         except:
+            db.session.close()
             return {"message": "Retrieve post failed"}, 500
             
 db_api.add_resource(User_Access,"/db/user")

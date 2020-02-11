@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse 
 from flask_backend.models import Login, Revoked_Token
-from flask_backend import auth_api
+from flask_backend import auth_api, db
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
 parser = reqparse.RequestParser()
@@ -20,7 +20,8 @@ class Register_User(Resource):
             new_user.save_to_db()
             return {"message" : data['username'] + " has been created"}, 200
         except:
-            return {'message': 'Registration error, please try again'}, 500
+            db.session.close()
+            return {'message': 'Something went wrong'}, 500
 
 class Login_User(Resource):
     def post(self):
@@ -37,6 +38,7 @@ class Login_User(Resource):
                 'refresh_token': refresh_token
             }
         else:
+            db.session.close()
             return {'message': 'Incorrect username/password'}
 
 class Logout_Access(Resource):
@@ -48,6 +50,7 @@ class Logout_Access(Resource):
             revoked_token.save_to_db()
             return {'message': 'Access token has been revoked'}
         except:
+            db.session.close()
             return {'message': 'Something went wrong'}, 500
       
       
@@ -60,6 +63,7 @@ class Logout_Refresh(Resource):
             revoked_token.save_to_db()
             return {'message': 'Refresh token has been revoked'}
         except:
+            db.session.close()
             return {'message': 'Something went wrong'}, 500
       
       
