@@ -4,7 +4,8 @@ def test_valid_create_post(test_client, init_database):
     #valid request
     response = test_client.post('/db/post?user_id=1&title=test&content=testcontent&tag=random')
     assert response.status_code == 200
-    assert b'{\n    "message": "Post created",\n    "post_id": 2\n}\n'  in response.data
+    response_obj = json.loads(response.data)
+    assert response_obj == {"message" :"Post created", "post_id": 2}
 
     #test with jwt token
     #check it was saved to the db
@@ -37,4 +38,22 @@ def test_invalid_get_post_by_id(test_client, init_database):
     assert response.status_code == 500
     response_obj = json.loads(response.data)
     assert response_obj == {"message": "Retrieve post failed"}
+
+# test access user data route
+def test_valid_get_user(test_client, init_database):
+    response = test_client.get('/db/user?user_id=1')
+    assert response.status_code == 200
+    response_obj = json.loads(response.data)
+    response_obj = {
+            "user_id": 1,
+            "username": "test",
+            "moderator": False,
+            "private": False,
+        }
+
+def test_invalid_get_user(test_client, init_database):
+    response = test_client.get('/db/user?user_id=-1')
+    assert response.status_code == 500
+    response_obj = json.loads(response.data)
+    assert response_obj == {"message": "request failed"}
 
