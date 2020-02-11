@@ -11,7 +11,7 @@ class Register_User(Resource):
     def post(self):
         data = parser.parse_args()
         if Login.find_by_username(data['username']):
-            return {'message': 'User {} already exists'. format(data['username'])}    
+            return {'message': 'User {} already exists'. format(data['username'])}, 400    
         new_user = Login(
             username = data['username'],
             plaintext_password = data['password']
@@ -20,14 +20,14 @@ class Register_User(Resource):
             new_user.save_to_db()
             return {"message" : data['username'] + " has been created"}, 200
         except:
-            return {'message': 'Something went wrong'}, 500
+            return {'message': 'Registration error, please try again'}, 500
 
 class Login_User(Resource):
     def post(self):
         data = parser.parse_args()
         current_user = Login.find_by_username(data['username'])
         if not current_user:
-            return {'message': 'User {} doesn\'t exist'.format(data['username'])}
+            return {'message': 'Incorrect username/password'}
         if current_user.is_correct_password(data['password']):
             access_token = create_access_token(identity = data['username'])
             refresh_token = create_refresh_token(identity = data['username'])
@@ -37,7 +37,7 @@ class Login_User(Resource):
                 'refresh_token': refresh_token
             }
         else:
-            return {'message': 'Wrong credentials'}
+            return {'message': 'Incorrect username/password'}
 
 class Logout_Access(Resource):
     @jwt_required
