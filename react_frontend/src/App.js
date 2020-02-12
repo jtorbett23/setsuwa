@@ -12,6 +12,8 @@ import Register from './components/Register'
 import MakePost from './components/MakePost'
 import EditPostHookContainer from './containers/EditPostHookContainer'
 import SinglePostHookContainer from './containers/SinglePostHookContainer'
+import PostsHookContainer from './containers/PostsHookContainer'
+import Posts from './containers/Posts'
 import './static/css/App.css';
 
 export default class App extends Component {
@@ -63,12 +65,6 @@ export default class App extends Component {
                   <li>
                       <Link to="/">Home</Link>
                   </li>
-                  <p>Search a tag</p>
-                  <select>
-                    <option value="Sports">Sports</option>
-                    <option value="Movies">Movies</option>
-                    <option value="Food">Food</option>
-                  </select>
                   {this.state.loggedIn &&
                     <div>
                       <li>
@@ -101,7 +97,7 @@ export default class App extends Component {
                    <SinglePostHookContainer user_id={this.state.user_id} />
               </Route>
               <Route path="/login">
-               {this.state.loggedIn ? <Redirect to="/" /> :
+               {this.state.loggedIn ? <Redirect to={`/${this.state.user_id}`} /> :
                     <Login 
                   handleUsername={this.handleUsername.bind(this)} 
                   handlePassword={this.handlePassword.bind(this)} 
@@ -120,9 +116,11 @@ export default class App extends Component {
               <Route path="/editpost/:id">
                   <EditPostHookContainer user_id={this.state.user_id} />
               </Route>
+              <Route path="/:id">
+                  <PostsHookContainer user_id={this.state.user_id} />
+              </Route>
               <Route path="/">
-                  {/* <Posts post={this.state.post} /> */}
-                  <p>This is the home page that will display "Posts"</p>
+                  <Posts user_id={this.state.user_id} />
               </Route>
           </Switch>
         </div>
