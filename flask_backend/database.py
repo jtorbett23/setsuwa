@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse 
 from flask_backend.models import User, Blog
 from flask_backend import db_api,db
-from flask import jsonify
+from flask import jsonify, g
 from flask_jwt_extended import jwt_required
 
 parser = reqparse.RequestParser()
@@ -27,10 +27,13 @@ class Post(Resource):
     def post(self):
         data = parser.parse_args()
         try:
-            new_blog = Blog(data['user_id'],data['title'],data['content'],data['tag'])
-            new_blog.save_to_db()
-            return {"message" :"Post created",
-                    "post_id": new_blog.post_id},200
+            if data['user_id'] == str(g.user.user_id):
+                new_blog = Blog(data['user_id'],data['title'],data['content'],data['tag'])
+                new_blog.save_to_db()
+                return {"message" :"Post created",
+                        "post_id": new_blog.post_id},200
+            else:
+                return {"message": "Create post failed"}, 500
         except:
             db.session.close()
             return {"message": "Create post failed"}, 500
@@ -47,14 +50,17 @@ class Post(Resource):
      # @jwt_required -> commented out for development & it is your post
     def delete(self):
         data = parser.parse_args()
-        if(Blog.find_by_id(data['post_id'])):
-            try:
+        try:
+            del_blog = Blog.find_by_id(data['post_id'])
+            if(g.user.user_id == del_blog.user_id):
                 Blog.delete_by_id(data['post_id'])
                 return {"message": "Post deleted"}, 200
-            except:
-                db.session.close()
-                return {"message": "Delete post failed"}, 500
-        return {"message": "Delete post failed"}, 400
+            else:
+                return {"message": "Delete post failed"}, 400
+        except:
+            db.session.close()
+            return {"message": "Delete post failed"}, 500
+        
 
     # @jwt_required -> commented out for development &  it is your post
     def put(self):
@@ -93,6 +99,13 @@ class Posts(Resource):
         except:
             return {"message" : "No posts found"}, 500
 
+class Tags(Resource):
+    def get(self):
+        tags = Blog.query.with_entities(Blog.tag).all()
+        tags_list = list(set(tags)) 
+        return tags_list
+
 db_api.add_resource(User_Access,"/db/user")
 db_api.add_resource(Post,"/db/post")
 db_api.add_resource(Posts,"/db/posts")
+db_api.add_resource(Tags, "/db/posts/tags")

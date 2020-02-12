@@ -1,4 +1,5 @@
 import json
+from flask import g
 # test create post route
 def test_valid_create_post(test_client, init_database):
     #valid request
@@ -81,7 +82,7 @@ def test_valid_delete_post(test_client, init_database):
 
 def test_invalid_delete_post(test_client, init_database):
     response = test_client.delete('/db/post?post_id=-1')
-    assert response.status_code == 400
+    assert response.status_code == 500
     response_obj = json.loads(response.data)
     assert response_obj == {"message": "Delete post failed"}
 
@@ -94,7 +95,6 @@ def test_valid_get_user(test_client, init_database):
     response_obj = {
             "user_id": 1,
             "username": "test",
-            "moderator": False,
             "private": False,
         }
 
@@ -118,7 +118,7 @@ def test_get_posts(test_client, init_database):
     assert response.status_code == 200
     response_array = json.loads(response.data)
     assert len(response_array) == 10
-    assert response_array[0]['popularity'] < response_array[1]['popularity']
+    assert response_array[1]['popularity'] < response_array[2]['popularity']
 
     #filter by newest
     response = test_client.get('/db/posts?filter=new')
@@ -219,3 +219,9 @@ def test_valid_get_tag_posts(test_client, init_database):
     assert response.status_code == 400
     response_obj = json.loads(response.data)
     assert response_obj == {"message" : "No posts found"}
+
+def test_get_all_tags(test_client, init_database):
+    response = test_client.get('/db/posts/tags')
+    assert response.status_code == 200
+    response_array = json.loads(response.data)
+    assert len(response_array) == 7

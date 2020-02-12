@@ -25,8 +25,9 @@ def create_app(config_filename=None):
     def test():
         return "app is running"
         
-    @app.route('/')
-    def react():
+    @app.route('/', defaults={'path': ''})
+    @app.route('/<path:path>')
+    def react(path):
         return render_template('index.html')
     return app
 
