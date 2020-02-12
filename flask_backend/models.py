@@ -89,13 +89,13 @@ class Blog(db.Model):
     created = db.Column(db.DateTime, default=datetime.today())
     flagged = db.Column(db.Integer, default=False)
 
-    def __init__(self, user_id, title, content, tag, created=datetime.today()):
+    def __init__(self, user_id, title, content, tag, created=datetime.today(), popularity=0):
         self.user_id = user_id
         self.title = title
         self.content = content
         self.tag = tag
         self.created = created
-        self.popularity = 0
+        self.popularity = popularity
         self.flagged = False
 
     def to_object(self):
@@ -133,26 +133,41 @@ class Blog(db.Model):
         cls.query.filter_by(post_id=id).delete() 
         db.session.commit()
 
-    #get 10 post by popularity
+    #get all posts by filter
     @classmethod
-    def find_popular(cls):
-        return cls.query.limit(10).all().order_by(cls.popularity.amount.desc())
-
-    #get posts by tag in order of popularity
+    def find_posts(cls, filter="pop"):
+        if(filter == "pop"):
+            return cls.query.order_by(cls.popularity.desc()).limit(10).all()
+        elif(filter == "unpop"):
+            return cls.query.order_by(cls.popularity.asc()).limit(10).all()
+        elif(filter == "new"):
+            return cls.query.order_by(cls.created.desc()).limit(10).all()
+        elif(filter == "old"):
+            return cls.query.order_by(cls.created.asc()).limit(10).all()
+    
     @classmethod
-    def find_popular(cls, tag_name):
-        return cls.query.filter_by(tag = tag_name).all().order_by(cls.popularity.amount.desc())
-    
-    # #get 10 newest posts
-    # @classmethod
-    # def find_new(cls):
-    #     return cls.query.limit(10).all()
-    
-    # #get 10 oldest posts
-    # @classmethod
-    # def find_old(cls):
-    #     return cls.query.limit(10).all()
+    def find_user_posts(cls,user_id, filter="new"):
+        if(filter == "pop"):
+            return cls.query.filter(cls.user_id == user_id).order_by(cls.popularity.desc()).all()
+        elif(filter == "unpop"):
+            return cls.query.filter(cls.user_id == user_id).order_by(cls.popularity.asc()).all()
+        elif(filter == "new"):
+            return cls.query.filter(cls.user_id == user_id).order_by(cls.created.desc()).all()
+        elif(filter == "old"):
+            return cls.query.filter(cls.user_id == user_id).order_by(cls.created.asc()).all()
 
+    #get all posts for a tag
+    @classmethod
+    def find_tag_posts(cls, tag, filter="pop"):
+        if(filter == "pop"):
+            return cls.query.filter(cls.tag == tag).order_by(cls.popularity.desc()).limit(10).all()
+        elif(filter == "unpop"):
+            return cls.query.filter(cls.tag == tag).order_by(cls.popularity.asc()).limit(10).all()
+        elif(filter == "new"):
+            return cls.query.filter(cls.tag == tag).order_by(cls.created.desc()).limit(10).all()
+        elif(filter == "old"):
+            return cls.query.filter(cls.tag == tag).order_by(cls.created.asc()).limit(10).all()
+      
     
 
 

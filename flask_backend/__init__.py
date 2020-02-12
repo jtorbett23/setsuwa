@@ -64,21 +64,21 @@ def seed_db():
     user.save_to_db()
     from datetime import datetime 
     posts = [
-        {"title": "1", "content": "a", "tag":"sport", "created": datetime(2009,5,17)},
-        {"title": "2", "content": "b", "tag":"sport", "created": datetime(2010, 5, 17)},
-        {"title": "3", "content": "c", "tag":"sport", "created": datetime(2021, 5, 17)},
-        {"title": "4", "content": "d", "tag":"movies", "created": datetime(2012, 5, 17)},
-        {"title": "5", "content": "e", "tag":"movies", "created": datetime(2013, 5, 17)},
-        {"title": "6", "content": "f", "tag":"food", "created": datetime(2014, 5, 17)},
-        {"title": "7", "content": "g", "tag":"food", "created": datetime(2015, 5, 17)},
-        {"title": "8", "content": "h", "tag":"food", "created": datetime(2016, 5, 17)},
-        {"title": "9", "content": "i", "tag":"food", "created": datetime(2017, 5, 17)},
-        {"title": "10", "content": "j", "tag":"travel", "created": datetime(2018, 5, 17)},
-        {"title": "11", "content": "k", "tag":"games", "created": datetime(2019, 5, 17)},
-        {"title": "12", "content": "l", "tag":"technology", "created": datetime(2020, 5, 17)},
+        {"title": "1", "content": "a", "tag":"sport", "created": datetime(2009,5,17),"popularity":20},
+        {"title": "2", "content": "b", "tag":"sport", "created": datetime(2010, 5, 17),"popularity":15},
+        {"title": "3", "content": "c", "tag":"sport", "created": datetime(2021, 5, 17),"popularity":14},
+        {"title": "4", "content": "d", "tag":"movies", "created": datetime(2012, 5, 17),"popularity":13},
+        {"title": "5", "content": "e", "tag":"movies", "created": datetime(2013, 5, 17),"popularity":10},
+        {"title": "6", "content": "f", "tag":"food", "created": datetime(2014, 5, 17),"popularity":9},
+        {"title": "7", "content": "g", "tag":"food", "created": datetime(2015, 5, 17),"popularity":8},
+        {"title": "8", "content": "h", "tag":"food", "created": datetime(2016, 5, 17),"popularity":7},
+        {"title": "9", "content": "i", "tag":"food", "created": datetime(2017, 5, 17),"popularity":6},
+        {"title": "10", "content": "j", "tag":"travel", "created": datetime(2018, 5, 17),"popularity":3},
+        {"title": "11", "content": "k", "tag":"games", "created": datetime(2019, 5, 17),"popularity":2},
+        {"title": "12", "content": "l", "tag":"technology", "created": datetime(2020, 5, 17),"popularity":1},
         ]
     for post in posts:
-        new_post = models.Blog(user.user_id,post['title'],post['content'], post['tag'], post['created'])
+        new_post = models.Blog(user.user_id,post['title'],post['content'], post['tag'], post['created'], post['popularity'])
         new_post.save_to_db()
 
 
