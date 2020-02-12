@@ -14,7 +14,6 @@ def test_valid_registration(test_client, init_database):
     assert response_obj  == {
             "user_id": 2,
             "username": "mod",
-            "moderator": False,
             "private": False,
         }
 

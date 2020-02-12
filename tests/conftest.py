@@ -4,7 +4,7 @@ from flask_backend import create_app, db
 from flask_backend.models import Login,User, Blog, Revoked_Token
 from datetime import datetime 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def test_client():
     flask_app = create_app('flask_test.cfg')
 
@@ -20,26 +20,22 @@ def test_client():
     ctx.pop()
 
 @pytest.fixture()
-def set_g_user():
-    new_user = User(user_id = 1, username = "test")
-    g.user = new_user
-
-@pytest.fixture()
-def set_g_moderator():
-    new_mod = User(user_id = 2, username = "mod", moderator = True)
-    g.user = new_mod
-
-@pytest.fixture(scope='module')
 def init_database():
+    #clear databases
+    db.drop_all()
+    db.drop_all(bind=["auth"])
+
     # Create the databases and the database tables
     db.create_all()
     db.create_all(bind=["auth"]) 
 
     # Insert user data
-    new_user1 = Login("test","pass")
-    new_user1.save_to_db()
-    new_user2 = Login("mod","pass")
-    new_user2.save_to_db()
+    new_user = Login("test","pass")
+    g.user = new_user
+    new_user.save_to_db()
+    new_mod = Login("mod","pass", True)
+    g.mod = new_mod
+    new_mod.save_to_db()
     posts = [
         {"user_id":1, "title": "Faker 123", "content": "Donald trump nukes brazil", "tag":"party", "created": datetime(2020, 5, 17),"popularity":0},
         {"user_id":1, "title": "2", "content": "b", "tag":"sport", "created": datetime(2010, 5, 17),"popularity":15},

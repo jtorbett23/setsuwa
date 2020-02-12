@@ -1,6 +1,7 @@
 import json
+from flask import g
 # test create post route
-def test_valid_create_post(set_g_user ,test_client, init_database):
+def test_valid_create_post(test_client, init_database):
     #valid request
     response = test_client.post('/db/post?user_id=1&title=test&content=testcontent&tag=random')
     assert response.status_code == 200
@@ -66,7 +67,7 @@ def test_invalid_id_update_post_by_id(test_client, init_database):
     assert response_obj == {"message" : "Post update failed"}
 
 #test delete post by id route
-def test_valid_delete_post(set_g_user,test_client, init_database):
+def test_valid_delete_post(test_client, init_database):
     #delete post 
     response = test_client.delete('/db/post?post_id=1')
     assert response.status_code == 200
@@ -94,7 +95,6 @@ def test_valid_get_user(test_client, init_database):
     response_obj = {
             "user_id": 1,
             "username": "test",
-            "moderator": False,
             "private": False,
         }
 
@@ -118,7 +118,7 @@ def test_get_posts(test_client, init_database):
     assert response.status_code == 200
     response_array = json.loads(response.data)
     assert len(response_array) == 10
-    assert response_array[0]['popularity'] < response_array[1]['popularity']
+    assert response_array[1]['popularity'] < response_array[2]['popularity']
 
     #filter by newest
     response = test_client.get('/db/posts?filter=new')

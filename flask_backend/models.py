@@ -4,13 +4,15 @@ from datetime import datetime
 #Authorisation DB
 class Login(db.Model):
     __bind_key__ = 'auth'
-    user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(80), nullable=False)
+    user_id = db.Column(db.Integer, primary_key = True)
+    username = db.Column(db.String(80), unique = True, nullable = False)
+    password = db.Column(db.String(80), nullable = False)
+    moderator = db.Column(db.Boolean, default = False)
 
-    def __init__(self,username, plaintext_password):
+    def __init__(self,username, plaintext_password, moderator = False):
         self.username = username
         self.password = bcrypt.generate_password_hash(plaintext_password)
+        self.moderator = moderator
     #add user to db    
     def save_to_db(self):
         db.session.add(self)
@@ -52,14 +54,12 @@ class Revoked_Token(db.Model):
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
-    moderator = db.Column(db.Boolean, default=False)
     private = db.Column(db.Boolean, default=False)
     posts = db.relationship('Blog', backref='user', lazy=False)
 
-    def __int__(self, user_id, username, moderator=False):
+    def __int__(self, user_id, username):
         self.user_id = user_id
         self.username = username
-        self.moderator = moderator
         self.private = False
     
     #get user by id
@@ -71,7 +71,6 @@ class User(db.Model):
         return {
             "user_id": self.user_id,
             "username": self.username,
-            "moderator": self.moderator,
             "private": self.private,
         }
 

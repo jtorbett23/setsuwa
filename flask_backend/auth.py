@@ -39,6 +39,7 @@ class Login_User(Resource):
             refresh_token = create_refresh_token(identity = data['username'])
             return {
                 'user_id': current_user.user_id,
+                'moderator' : current_user.moderator,
                 'access_token': access_token,
                 'refresh_token': refresh_token
             }, 200
