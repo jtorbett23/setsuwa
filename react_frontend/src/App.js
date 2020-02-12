@@ -10,22 +10,20 @@ import axios from 'axios';
 import Login from './components/Login'
 import Register from './components/Register'
 import MakePost from './components/MakePost'
+import EditPostHookContainer from './containers/EditPostHookContainer'
 import SinglePostHookContainer from './containers/SinglePostHookContainer'
 // import Posts from './containers/Posts'
 import './static/css/App.css';
 
 export default class App extends Component {
   state = {
-    loggedIn: true,
+    loggedIn: false,
     username: null,
     password: null,
     user_id: 1,
     loggedInMessage: false,
     logInMessage: false,
     registerPayload: null,
-    // title: null,
-    // blog: null,
-    // tags: null,
     post: null,
     posts: null,
   }
@@ -36,15 +34,6 @@ export default class App extends Component {
   handlePassword (e) {
     this.setState({password: e.target.value})
   }
-  // handleTitle (e) {
-  //   this.setState({title: e.target.value})
-  // }
-  // handleBlog (e) {
-  //   this.setState({blog: e.target.value})
-  // }
-  // handleTags (e) {
-  //   this.setState({tags: e.target.value})
-  // }
 
   getID() {
     axios.post(`http://localhost:5000/auth/login?username=${this.state.username}&password=${this.state.password}`)
@@ -166,14 +155,10 @@ export default class App extends Component {
                   {/* <Users /> */}
               </Route>
               <Route path="/createpost">
-                  {this.state.post !== null ? <Redirect to={`/post/${this.state.post}`} /> :
-                  <MakePost 
-                  user_id={this.state.user_id}
-                  // handleTitle={this.handleTitle.bind(this)}
-                  // handleBlog={this.handleBlog.bind(this)}
-                  // handleTags={this.handleTags.bind(this)}
-                  // createPost={this.createPost.bind(this)}
-                  />}
+                  <MakePost user_id={this.state.user_id} />
+              </Route>
+              <Route path="/editpost/:id">
+                  <EditPostHookContainer user_id={this.state.user_id} />
               </Route>
               <Route path="/">
                   {/* <Posts post={this.state.post} /> */}
