@@ -38,20 +38,23 @@ export default class MakePost extends Component {
         })
     }
 
-    createThenRedirect() {
+    createThenRedirect(e) {
+        e.preventDefault()
         this.createPost()
     }
 
     render() {
         return (
             <div>
-                <label htmlFor="title">Title</label>
-                <input type="text" name="title" onChange={this.handleTitle.bind(this)} placeholder="type here..."></input>
-                <label htmlFor="blog">Blog</label>
-                <input type="text" name="blog" onChange={this.handleBlog.bind(this)} placeholder="Whatsonn your mind..."></input>
-                <label htmlFor="tags">Tag</label>
-                <input type="text" name="tags" onChange={this.handleTags.bind(this)} placeholder="tag"></input>
-                <button onClick={this.createThenRedirect.bind(this)}>Post</button>
+                <form onSubmit={this.createThenRedirect.bind(this)}>
+                    <label htmlFor="title">Title</label>
+                    <input type="text" name="title" onChange={this.handleTitle.bind(this)} placeholder="type here..." required></input>
+                    <label htmlFor="blog">Blog</label>
+                    <input type="text" name="blog" onChange={this.handleBlog.bind(this)} placeholder="Whatsonn your mind..." required></input>
+                    <label htmlFor="tags">Tag</label>
+                    <input type="text" name="tags" onChange={this.handleTags.bind(this)} placeholder="tag" required></input>
+                    <input type="submit" value="Post"></input>
+                </form>
                 {this.state.errorMSG !== null ? <p>{this.state.errorMSG}</p> : null}
                 {this.state.made === true ? <Redirect push to={`/post/${this.state.post_id}`}/> : null}
             </div>
