@@ -103,7 +103,6 @@ class Tags(Resource):
     def get(self):
         tags = Blog.query.with_entities(Blog.tag).all()
         tags_list = list(set(tags)) 
-        print(tags_list)
         return tags_list
 
 db_api.add_resource(User_Access,"/db/user")

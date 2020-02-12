@@ -219,3 +219,9 @@ def test_valid_get_tag_posts(test_client, init_database):
     assert response.status_code == 400
     response_obj = json.loads(response.data)
     assert response_obj == {"message" : "No posts found"}
+
+def test_get_all_tags(test_client, init_database):
+    response = test_client.get('/db/posts/tags')
+    assert response.status_code == 200
+    response_array = json.loads(response.data)
+    assert len(response_array) == 7
