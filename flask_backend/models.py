@@ -166,7 +166,5 @@ class Blog(db.Model):
             return cls.query.filter(cls.tag == tag).order_by(cls.created.desc()).limit(10).all()
         elif(filter == "old"):
             return cls.query.filter(cls.tag == tag).order_by(cls.created.asc()).limit(10).all()
-      
-    
 
 

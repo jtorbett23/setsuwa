@@ -1,5 +1,12 @@
 import json
 from flask import g
+
+#get access and refresh tokens
+def get_jwt_tokens(client):
+    response = client.post('/auth/login?username=test&password=pass')
+    response_obj = json.loads(response.data)
+    return response_obj
+
 # test create post route
 def test_valid_create_post(test_client, init_database):
     #valid request
@@ -225,3 +232,15 @@ def test_get_all_tags(test_client, init_database):
     assert response.status_code == 200
     response_array = json.loads(response.data)
     assert len(response_array) == 7
+
+def test_valid_toggle_flagged(test_client, init_database):
+    response = test_client.put('/db/flag?post_id=1')
+    assert response.status_code == 200
+    response_obj = json.loads(response.data)
+    assert response_obj == {"message" : "Post flag toggled"}
+
+def test_valid_toggle_flagged(test_client, init_database):
+    response = test_client.put('/db/flag?post_id=-1')
+    assert response.status_code == 404
+    response_obj = json.loads(response.data)
+    assert response_obj == {"message" : "No page found"}
