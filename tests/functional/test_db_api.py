@@ -27,20 +27,46 @@ def test_invalid_create_post(test_client, init_database):
     #test without jwt token
 
 # test get post by id route
-def test_valid_get_post_by_id(test_client, init_database):
+def test_valid_get_post(test_client, init_database):
     response = test_client.get('/db/post?post_id=1')
     assert response.status_code == 200
     response_obj = json.loads(response.data)
     assert response_obj == { "content": "Donald trump nukes brazil",  "created": "Sun, 17 May 2020 00:00:00 GMT",  "flagged": 0,  "popularity": 0,  "post_id": 1,  "tag": "party",  "title": "Faker 123",  "user_id": 1}
 
-def test_invalid_get_post_by_id(test_client, init_database):
+def test_invalid_get_post(test_client, init_database):
     response = test_client.get('/db/post?post_id=-1')
     assert response.status_code == 500
     response_obj = json.loads(response.data)
     assert response_obj == {"message": "Retrieve post failed"}
 
+#test post update route by id
+def test_valid_update_post(test_client, init_database):
+    #update post
+    response = test_client.put('db/post?post_id=1&title=new&content=new&tag=new')
+    assert response.status_code == 200
+    response_obj = json.loads(response.data)
+    assert response_obj == {"message" : "Post updated", 'post_id': '1'}
+    #check update is saved to db
+    response = test_client.get('/db/post?post_id=1')
+    assert response.status_code == 200
+    response_obj = json.loads(response.data)
+    assert response_obj == { "content": "new",  "created": "Sun, 17 May 2020 00:00:00 GMT",  "flagged": 0,  "popularity": 0,  "post_id": 1,  "tag": "new",  "title": "new",  "user_id": 1}
+
+def test_invalid_id_update_post_by_id(test_client, init_database):
+    #invalid id
+    response = test_client.put('db/post?post_id=-1&title=new&content=new&tag=new')
+    assert response.status_code == 400
+    response_obj = json.loads(response.data)
+    assert response_obj == {"message" : "Post update failed"}
+
+    #missing parameter
+    response = test_client.put('db/post?post_id=1&title=new&content=new')
+    assert response.status_code == 400
+    response_obj = json.loads(response.data)
+    assert response_obj == {"message" : "Post update failed"}
+
 #test delete post by id route
-def test_valid_delete_post_by_id(test_client, init_database):
+def test_valid_delete_post(test_client, init_database):
     #delete post 
     response = test_client.delete('/db/post?post_id=1')
     assert response.status_code == 200
@@ -53,11 +79,12 @@ def test_valid_delete_post_by_id(test_client, init_database):
     response_obj = json.loads(response.data)
     assert response_obj == {"message": "Retrieve post failed"}
 
-def test_invalid_delete_post_by_id(test_client, init_database):
+def test_invalid_delete_post(test_client, init_database):
     response = test_client.delete('/db/post?post_id=-1')
     assert response.status_code == 400
     response_obj = json.loads(response.data)
     assert response_obj == {"message": "Delete post failed"}
+
 
 # test access user data route
 def test_valid_get_user(test_client, init_database):

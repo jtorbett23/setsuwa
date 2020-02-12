@@ -113,9 +113,15 @@ class Blog(db.Model):
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
-    
-    
-    
+
+    #update by id
+    @classmethod
+    def edit_by_id(cls, id, title, content, tag):
+        edit_blog =cls.find_by_id(id)
+        edit_blog.title = title
+        edit_blog.content = content
+        edit_blog.tag= tag
+        edit_blog.save_to_db()
     #get post by id
     @classmethod
     def find_by_id(cls, id):
