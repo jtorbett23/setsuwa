@@ -105,7 +105,40 @@ class Tags(Resource):
         tags_list = list(set(tags)) 
         return tags_list
 
+class Flag(Resource):
+    def get(self):
+        # @jwt_required -> commented out for development
+        data = parser.parse_args()
+        try:
+            if(g.user.moderator == True):
+                flagged_blogs = Blog.query.filter(Blog.flagged == 1 ).all()
+                blogs_objs = []
+                for blog in flagged_blogs:
+                    blogs_objs.append(blog.to_object()) 
+                if(blogs_objs) :
+                    return jsonify(blogs_objs)
+                else:
+                    db.session.close()
+                    return {"message" : "No posts found"}, 400
+            else:
+                 return {"message" : "Invalid Route"}, 404
+        except:
+            return {"message" : "Invalid Route"}, 404
+    def put(self):
+        # @jwt_required -> commented out for development
+        data = parser.parse_args()
+        try:
+                flag_blog = Blog.find_by_id(data['post_id'])
+                flag_blog.flagged = not flag_blog.flagged
+                flag_blog.save_to_db()
+                return {"message" : "Post flag toggled"}, 200
+        except:
+            db.session.close()
+            return {"message" : "No page found"}, 404
+
+
 db_api.add_resource(User_Access,"/db/user")
 db_api.add_resource(Post,"/db/post")
+db_api.add_resource(Flag, "/db/flag")
 db_api.add_resource(Posts,"/db/posts")
 db_api.add_resource(Tags, "/db/posts/tags")

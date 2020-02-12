@@ -1,5 +1,12 @@
 import json
 from flask import g
+
+#get access and refresh tokens
+def get_jwt_tokens(client):
+    response = client.post('/auth/login?username=test&password=pass')
+    response_obj = json.loads(response.data)
+    return response_obj
+
 # test create post route
 def test_valid_create_post(test_client, init_database):
     #valid request
@@ -32,7 +39,7 @@ def test_valid_get_post(test_client, init_database):
     response = test_client.get('/db/post?post_id=1')
     assert response.status_code == 200
     response_obj = json.loads(response.data)
-    assert response_obj == { "content": "Donald trump nukes brazil",  "created": "Sun, 17 May 2020 00:00:00 GMT",  "flagged": 0,  "popularity": 0,  "post_id": 1,  "tag": "party",  "title": "Faker 123",  "user_id": 1}
+    assert response_obj == { "content": "Donald trump nukes brazil",  "created": "Sun, 17 May 2020 00:00:00 GMT",  "flagged": 1,  "popularity": 0,  "post_id": 1,  "tag": "party",  "title": "Faker 123",  "user_id": 1}
 
 def test_invalid_get_post(test_client, init_database):
     response = test_client.get('/db/post?post_id=-1')
@@ -51,7 +58,7 @@ def test_valid_update_post(test_client, init_database):
     response = test_client.get('/db/post?post_id=1')
     assert response.status_code == 200
     response_obj = json.loads(response.data)
-    assert response_obj == { "content": "new",  "created": "Sun, 17 May 2020 00:00:00 GMT",  "flagged": 0,  "popularity": 0,  "post_id": 1,  "tag": "new",  "title": "new",  "user_id": 1}
+    assert response_obj == { "content": "new",  "created": "Sun, 17 May 2020 00:00:00 GMT",  "flagged": 1,  "popularity": 0,  "post_id": 1,  "tag": "new",  "title": "new",  "user_id": 1}
 
 def test_invalid_id_update_post_by_id(test_client, init_database):
     #invalid id
@@ -225,3 +232,30 @@ def test_get_all_tags(test_client, init_database):
     assert response.status_code == 200
     response_array = json.loads(response.data)
     assert len(response_array) == 7
+
+def test_valid_toggle_flagged(test_client, init_database):
+    response = test_client.put('/db/flag?post_id=1')
+    assert response.status_code == 200
+    response_obj = json.loads(response.data)
+    assert response_obj == {"message" : "Post flag toggled"}
+
+def test_invalid_toggle_flagged(test_client, init_database):
+    response = test_client.put('/db/flag?post_id=-1')
+    assert response.status_code == 404
+    response_obj = json.loads(response.data)
+    assert response_obj == {"message" : "No page found"}
+
+def test_valid_get_flagged_posts(test_client, init_database):
+    g.user = g.mod
+    response = test_client.get('/db/flag')
+    assert response.status_code == 200
+    response_array = json.loads(response.data)
+    assert len(response_array) == 4
+
+def test_invalid_get_flagged_posts(test_client, init_database):
+    #not a moderator
+    response = test_client.get('/db/flag')
+    assert response.status_code == 404
+    response_obj = json.loads(response.data)
+    assert response_obj == {'message': 'Invalid Route'}
+    
