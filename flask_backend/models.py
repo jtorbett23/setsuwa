@@ -88,14 +88,14 @@ class Blog(db.Model):
     created = db.Column(db.DateTime, default=datetime.today())
     flagged = db.Column(db.Integer, default=False)
 
-    def __init__(self, user_id, title, content, tag, created=datetime.today(), popularity=0):
+    def __init__(self, user_id, title, content, tag, created=datetime.today(), popularity=0, flagged = False):
         self.user_id = user_id
         self.title = title
         self.content = content
         self.tag = tag
         self.created = created
         self.popularity = popularity
-        self.flagged = False
+        self.flagged = flagged
 
     def to_object(self):
         return {
@@ -166,5 +166,4 @@ class Blog(db.Model):
             return cls.query.filter(cls.tag == tag).order_by(cls.created.desc()).limit(10).all()
         elif(filter == "old"):
             return cls.query.filter(cls.tag == tag).order_by(cls.created.asc()).limit(10).all()
-
 
