@@ -12,7 +12,6 @@ import Register from './components/Register'
 import MakePost from './components/MakePost'
 import EditPostHookContainer from './containers/EditPostHookContainer'
 import SinglePostHookContainer from './containers/SinglePostHookContainer'
-// import Posts from './containers/Posts'
 import './static/css/App.css';
 
 export default class App extends Component {
@@ -20,74 +19,39 @@ export default class App extends Component {
     loggedIn: false,
     username: null,
     password: null,
-    user_id: 1,
+    user_id: null,
     loggedInMessage: false,
     logInMessage: false,
-    registerPayload: null,
-    post: null,
     posts: null,
   }
 
   handleUsername (e) {
-    this.setState({username: e.target.value})
+    this.setState({username: e.target.value, logInMessage: false})
   }
   handlePassword (e) {
-    this.setState({password: e.target.value})
+    this.setState({password: e.target.value, logInMessage: false})
   }
 
   getID() {
     axios.post(`http://localhost:5000/auth/login?username=${this.state.username}&password=${this.state.password}`)
       .then(res => {
-        if(res.data.user_id) {
           this.setState({user_id: res.data.user_id})
           this.setState({loggedInMessage: "Logged in"})
           this.setState({loggedIn: true})
-        }
-        if(res.data.message) {
-          this.setState({logInMessage: res.data.message})
-          this.setState({loggedIn: false})
-        }
-      })
-    }
-    
-    createUser() {
-      axios.post(`http://localhost:5000/auth/register?username=${this.state.username}&password=${this.state.password}`)
-      .then(res => {
-        this.setState({registerPayload: res})
       })
       .catch(err => {
-        this.setState({registerPayload: err.response})
+          this.setState({logInMessage: err.response.data.message})
+          this.setState({loggedIn: false})   
       })
-    }
-    
-    // createPost() {
-    //   axios.post(`http://localhost:5000/db/post?user_id=${this.state.user_id}&title=${this.state.title}&content=${this.state.blog}&tag=${this.state.tags}`)
-    //   .then(res => {
-    //     if(res.status === 200) {
-    //         this.setState({post: res.data.post_id})
-    //         console.log(res.data.post_id)
-    //     }
-    //     if(res.status === 500) {
-    //       console.log('didnt work') // need to alter this
-    //     }
-    //   })
-    // }
+  }
 
-    handleLogin(e) {
-      e.preventDefault();
-      this.getID()
-    }
-    handleRegister(e) {
-      e.preventDefault();
-      this.createUser()
-    }
+  handleLogin(e) {
+    e.preventDefault();
+    this.getID()
+  }
     
-    logout() {
-      window.location.reload(false);
-    }
-
-  componentDidUpdate() {
-    console.log("woop")
+  logout() {
+    window.location.reload(false);
   }
 
   render() {
@@ -137,19 +101,15 @@ export default class App extends Component {
                    <SinglePostHookContainer user_id={this.state.user_id} />
               </Route>
               <Route path="/login">
-                  {this.state.loggedIn ? <Redirect to="/" /> :
+               {this.state.loggedIn ? <Redirect to="/" /> :
                     <Login 
                   handleUsername={this.handleUsername.bind(this)} 
                   handlePassword={this.handlePassword.bind(this)} 
                   handleLogin={this.handleLogin.bind(this)} 
-                  logInMessage={this.state.logInMessage} />} 
+                  logInMessage={this.state.logInMessage} />}
                   </Route>
                   <Route path="/register">
-                  <Register
-                  handleUsername={this.handleUsername.bind(this)} 
-                  handlePassword={this.handlePassword.bind(this)}
-                  handleRegister={this.handleRegister.bind(this)} 
-                  registerPayload={this.state.registerPayload}/>
+                  <Register />
               </Route>
               <Route path="/users">
                   {/* <Users /> */}
