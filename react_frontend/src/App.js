@@ -10,8 +10,9 @@ import axios from 'axios';
 import Login from './components/Login'
 import Register from './components/Register'
 import MakePost from './components/MakePost'
+import EditPostHookContainer from './containers/EditPostHookContainer'
 import SinglePostHookContainer from './containers/SinglePostHookContainer'
-import Posts from './containers/Posts'
+// import Posts from './containers/Posts'
 import './static/css/App.css';
 
 export default class App extends Component {
@@ -19,13 +20,10 @@ export default class App extends Component {
     loggedIn: false,
     username: null,
     password: null,
-    user_id: null,
+    user_id: 1,
     loggedInMessage: false,
     logInMessage: false,
     registerPayload: null,
-    title: null,
-    blog: null,
-    tags: null,
     post: null,
     posts: null,
   }
@@ -35,15 +33,6 @@ export default class App extends Component {
   }
   handlePassword (e) {
     this.setState({password: e.target.value})
-  }
-  handleTitle (e) {
-    this.setState({title: e.target.value})
-  }
-  handleBlog (e) {
-    this.setState({blog: e.target.value})
-  }
-  handleTags (e) {
-    this.setState({tags: e.target.value})
   }
 
   getID() {
@@ -71,18 +60,18 @@ export default class App extends Component {
       })
     }
     
-    createPost() {
-      axios.post(`http://localhost:5000/db/post?user_id=${this.state.user_id}&title=${this.state.title}&content=${this.state.blog}&tag=${this.state.tags}`)
-      .then(res => {
-        if(res.status === 200) {
-            this.setState({post: res.data.post_id})
-            console.log(res.data.post_id)
-        }
-        if(res.status === 500) {
-          console.log('didnt work') // need to alter this
-        }
-      })
-    }
+    // createPost() {
+    //   axios.post(`http://localhost:5000/db/post?user_id=${this.state.user_id}&title=${this.state.title}&content=${this.state.blog}&tag=${this.state.tags}`)
+    //   .then(res => {
+    //     if(res.status === 200) {
+    //         this.setState({post: res.data.post_id})
+    //         console.log(res.data.post_id)
+    //     }
+    //     if(res.status === 500) {
+    //       console.log('didnt work') // need to alter this
+    //     }
+    //   })
+    // }
 
     handleLogin(e) {
       e.preventDefault();
@@ -145,7 +134,7 @@ export default class App extends Component {
 
           <Switch>
               <Route path="/post/:id">
-                   <SinglePostHookContainer />
+                   <SinglePostHookContainer user_id={this.state.user_id} />
               </Route>
               <Route path="/login">
                   {this.state.loggedIn ? <Redirect to="/" /> :
@@ -166,12 +155,10 @@ export default class App extends Component {
                   {/* <Users /> */}
               </Route>
               <Route path="/createpost">
-                  {this.state.post !== null ? <Redirect to={`/post/${this.state.post}`} /> :
-                  <MakePost 
-                  handleTitle={this.handleTitle.bind(this)}
-                  handleBlog={this.handleBlog.bind(this)}
-                  handleTags={this.handleTags.bind(this)}
-                  createPost={this.createPost.bind(this)}/>}
+                  <MakePost user_id={this.state.user_id} />
+              </Route>
+              <Route path="/editpost/:id">
+                  <EditPostHookContainer user_id={this.state.user_id} />
               </Route>
               <Route path="/">
                   {/* <Posts post={this.state.post} /> */}
