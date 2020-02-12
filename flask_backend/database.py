@@ -10,6 +10,7 @@ parser.add_argument('post_id')
 parser.add_argument('title')
 parser.add_argument('content')
 parser.add_argument('tag')
+parser.add_argument('filter')
 
 class User_Access(Resource):
     # @jwt_required -> commented out for development
@@ -17,7 +18,7 @@ class User_Access(Resource):
         data = parser.parse_args() 
         try:
             return_user = User.find_by_id(data['user_id'])
-            return jsonify(return_user.to_object())
+            return jsonify(return_user.to_object()) # 200
         except:
             return {"message": "request failed"}, 500
 
@@ -65,6 +66,33 @@ class Post(Resource):
         except:
             db.session.close()
             return {"message" : "Post update failed"}, 400
+        
+class Posts(Resource):
+    def get(self):
+        data = parser.parse_args()
+        filter = "pop"
+        try:
+            if(data['filter']):
+                filter = data['filter']
+            if(data['user_id']):
+                blogs = Blog.find_user_posts(data['user_id'],filter)
+            elif(data['tag']):
+                blogs = Blog.find_tag_posts(data['tag'],filter)
+            else:
+                blogs = Blog.find_posts(filter)
+
+            blogs_objs = []
+            for blog in blogs:
+                blogs_objs.append(blog.to_object())
+                
+            if(blogs_objs) :
+                return jsonify(blogs_objs)
+            else:
+                db.session.close()
+                return {"message" : "No posts found"}, 400
+        except:
+            return {"message" : "No posts found"}, 500
 
 db_api.add_resource(User_Access,"/db/user")
 db_api.add_resource(Post,"/db/post")
+db_api.add_resource(Posts,"/db/posts")
