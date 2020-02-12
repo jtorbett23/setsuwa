@@ -56,10 +56,10 @@ class User(db.Model):
     private = db.Column(db.Boolean, default=False)
     posts = db.relationship('Blog', backref='user', lazy=False)
 
-    def __int__(self, user_id, username):
+    def __int__(self, user_id, username, moderator=False):
         self.user_id = user_id
         self.username = username
-        self.moderator = False
+        self.moderator = moderator
         self.private = False
     
     #get user by id

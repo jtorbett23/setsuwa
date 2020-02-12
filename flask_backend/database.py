@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse 
 from flask_backend.models import User, Blog
 from flask_backend import db_api,db
-from flask import jsonify
+from flask import jsonify, g
 from flask_jwt_extended import jwt_required
 
 parser = reqparse.RequestParser()
@@ -18,6 +18,7 @@ class User_Access(Resource):
         data = parser.parse_args() 
         try:
             return_user = User.find_by_id(data['user_id'])
+            g.user = return_user
             return jsonify(return_user.to_object()) # 200
         except:
             return {"message": "request failed"}, 500
@@ -27,10 +28,13 @@ class Post(Resource):
     def post(self):
         data = parser.parse_args()
         try:
-            new_blog = Blog(data['user_id'],data['title'],data['content'],data['tag'])
-            new_blog.save_to_db()
-            return {"message" :"Post created",
-                    "post_id": new_blog.post_id},200
+            if data['user_id'] == str(g.user.user_id):
+                new_blog = Blog(data['user_id'],data['title'],data['content'],data['tag'])
+                new_blog.save_to_db()
+                return {"message" :"Post created",
+                        "post_id": new_blog.post_id},200
+            else:
+                return {"message": "Create post failed"}, 500
         except:
             db.session.close()
             return {"message": "Create post failed"}, 500

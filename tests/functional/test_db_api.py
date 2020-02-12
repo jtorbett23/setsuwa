@@ -1,6 +1,6 @@
 import json
 # test create post route
-def test_valid_create_post(test_client, init_database):
+def test_valid_create_post(set_g_user ,test_client, init_database):
     #valid request
     response = test_client.post('/db/post?user_id=1&title=test&content=testcontent&tag=random')
     assert response.status_code == 200
