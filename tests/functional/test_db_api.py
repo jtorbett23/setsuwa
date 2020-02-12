@@ -66,7 +66,7 @@ def test_invalid_id_update_post_by_id(test_client, init_database):
     assert response_obj == {"message" : "Post update failed"}
 
 #test delete post by id route
-def test_valid_delete_post(test_client, init_database):
+def test_valid_delete_post(set_g_user,test_client, init_database):
     #delete post 
     response = test_client.delete('/db/post?post_id=1')
     assert response.status_code == 200
@@ -81,7 +81,7 @@ def test_valid_delete_post(test_client, init_database):
 
 def test_invalid_delete_post(test_client, init_database):
     response = test_client.delete('/db/post?post_id=-1')
-    assert response.status_code == 400
+    assert response.status_code == 500
     response_obj = json.loads(response.data)
     assert response_obj == {"message": "Delete post failed"}
 

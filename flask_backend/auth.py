@@ -1,26 +1,27 @@
 from flask_restful import Resource, reqparse 
 from flask_backend.models import Login, Revoked_Token
 from flask_backend import auth_api, db
+from flask import g
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
 parser = reqparse.RequestParser()
-parser.add_argument('username', help = 'This field cannot be blank')
-parser.add_argument('password', help = 'This field cannot be blank')
+parser.add_argument('username')
+parser.add_argument('password')
 
 class Register_User(Resource):
     def post(self):
-        data = parser.parse_args()
-        if Login.find_by_username(data['username']):
-
-            db.session.close()
-            return {'message': 'User {} already exists'. format(data['username'])},400    
-
+        data = parser.parse_args()  
         try:
-            new_user = Login(
-            username = data['username'],
-            plaintext_password = data['password'])
-            new_user.save_to_db()
-            return {"message" : data['username'] + " has been created"}, 200
+            if (data['password'] != "" and data['username'] != "") :
+                if Login.find_by_username(data['username']):
+                    db.session.close()
+                    return {'message': 'User {} already exists'. format(data['username'])},400  
+                new_user = Login(
+                username = data['username'],
+                plaintext_password = data['password'])
+                new_user.save_to_db()
+                return {"message" : data['username'] + " has been created"}, 200
+            return {'message': 'Something went wrong'}, 400 
         except:
             db.session.close()
             return {'message': 'Something went wrong'}, 500
@@ -33,6 +34,7 @@ class Login_User(Resource):
             return {'message': 'Incorrect username/password'}, 500
 
         if current_user.is_correct_password(data['password']):
+            g.user = current_user
             access_token = create_access_token(identity = data['username'])
             refresh_token = create_refresh_token(identity = data['username'])
             return {

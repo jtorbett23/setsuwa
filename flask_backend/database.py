@@ -18,7 +18,6 @@ class User_Access(Resource):
         data = parser.parse_args() 
         try:
             return_user = User.find_by_id(data['user_id'])
-            g.user = return_user
             return jsonify(return_user.to_object()) # 200
         except:
             return {"message": "request failed"}, 500
@@ -51,14 +50,17 @@ class Post(Resource):
      # @jwt_required -> commented out for development & it is your post
     def delete(self):
         data = parser.parse_args()
-        if(Blog.find_by_id(data['post_id'])):
-            try:
+        try:
+            del_blog = Blog.find_by_id(data['post_id'])
+            if(g.user.user_id == del_blog.user_id):
                 Blog.delete_by_id(data['post_id'])
                 return {"message": "Post deleted"}, 200
-            except:
-                db.session.close()
-                return {"message": "Delete post failed"}, 500
-        return {"message": "Delete post failed"}, 400
+            else:
+                return {"message": "Delete post failed"}, 400
+        except:
+            db.session.close()
+            return {"message": "Delete post failed"}, 500
+        
 
     # @jwt_required -> commented out for development &  it is your post
     def put(self):

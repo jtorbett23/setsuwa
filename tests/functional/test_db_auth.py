@@ -1,4 +1,5 @@
 import json
+from flask import g
 #test register user
 def test_valid_registration(test_client, init_database):
     #valid request
@@ -12,7 +13,7 @@ def test_valid_registration(test_client, init_database):
     response_obj = json.loads(response.data)
     assert response_obj  == {
             "user_id": 2,
-            "username": "new",
+            "username": "mod",
             "moderator": False,
             "private": False,
         }
@@ -25,9 +26,9 @@ def test_already_registered(test_client, init_database):
     assert response_obj  == {'message': 'User test already exists'}
 
 
-def test_valid_registration(test_client, init_database):
+def test_invalid_registration(test_client, init_database):
     #invalid request 
-    response = test_client.post('/auth/register?username=new')
+    response = test_client.post('/auth/register?username=newest')
     assert response.status_code == 500
     response_obj = json.loads(response.data)
     assert response_obj  == {'message': 'Something went wrong'}
@@ -42,6 +43,7 @@ def test_valid_login(test_client, init_database):
     assert response_obj['access_token'] != None
     assert response_obj['refresh_token'] != None
     assert response_obj['user_id'] == 1
+    assert g.user.user_id == 1
 
 def test_invalid_login(test_client, init_database):
     #invalid password
