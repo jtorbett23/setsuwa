@@ -39,6 +39,26 @@ def test_invalid_get_post_by_id(test_client, init_database):
     response_obj = json.loads(response.data)
     assert response_obj == {"message": "Retrieve post failed"}
 
+#test delete post by id route
+def test_valid_delete_post_by_id(test_client, init_database):
+    #delete post 
+    response = test_client.delete('/db/post?post_id=1')
+    assert response.status_code == 200
+    response_obj = json.loads(response.data)
+    assert response_obj == {"message": "Post deleted"}
+
+    #check db for post
+    response = test_client.get('/db/post?post_id=1')
+    assert response.status_code == 500
+    response_obj = json.loads(response.data)
+    assert response_obj == {"message": "Retrieve post failed"}
+
+def test_invalid_delete_post_by_id(test_client, init_database):
+    response = test_client.delete('/db/post?post_id=-1')
+    assert response.status_code == 400
+    response_obj = json.loads(response.data)
+    assert response_obj == {"message": "Delete post failed"}
+
 # test access user data route
 def test_valid_get_user(test_client, init_database):
     response = test_client.get('/db/user?user_id=1')

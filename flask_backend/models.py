@@ -114,10 +114,18 @@ class Blog(db.Model):
         db.session.add(self)
         db.session.commit()
     
+    
+    
     #get post by id
     @classmethod
     def find_by_id(cls, id):
         return cls.query.filter_by(post_id = id).first()
+    
+    #delete post by id
+    @classmethod
+    def delete_by_id(cls,id):
+        cls.query.filter_by(post_id=id).delete() 
+        db.session.commit()
 
     #get 10 post by popularity
     @classmethod

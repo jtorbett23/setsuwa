@@ -42,6 +42,17 @@ class Post(Resource):
         except:
             db.session.close()
             return {"message": "Retrieve post failed"}, 500
-            
+
+    def delete(self):
+        data = parser.parse_args()
+        if(Blog.find_by_id(data['post_id'])):
+            try:
+                Blog.delete_by_id(data['post_id'])
+                return {"message": "Post deleted"}, 200
+            except:
+                db.session.close()
+                return {"message": "Delete post failed"}, 500
+        return {"message": "Delete post failed"}, 400
+
 db_api.add_resource(User_Access,"/db/user")
 db_api.add_resource(Post,"/db/post")
