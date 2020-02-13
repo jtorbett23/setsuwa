@@ -4,24 +4,26 @@ from datetime import datetime
 
 #post data for seeding
 post_data = [
-        {'user_id' : 1,'title' : '2', 'content' : 'b', 'tag' : 'sport', 'created' : datetime(2010, 5, 17), 'popularity' : 15},
-        {'user_id' : 1, 'title' : '1', 'content' : 'a', 'tag' : 'sport', 'created' : datetime(2009,5,17), 'popularity' : 20},
-        {'user_id' : 1, 'title' : '3', 'content' : 'c', 'tag' : 'sport', 'created' : datetime(2021, 5, 17), 'popularity' : 14},
-        {'user_id' : 1, 'title' : '4', 'content' : 'd', 'tag' : 'movies', 'created' : datetime(2012, 5, 17), 'popularity' : 13},
-        {'user_id' : 1, 'title' : '5', 'content' : 'e', 'tag' : 'movies', 'created' : datetime(2013, 5, 17), 'popularity' : 10},
-        {'user_id' : 1, 'title' : '6', 'content' : 'f', 'tag' : 'food', 'created' : datetime(2014, 5, 17), 'popularity' : 9},
-        {'user_id' : 2, 'title' : '7', 'content' : 'g', 'tag' : 'food', 'created' : datetime(2015, 5, 17), 'popularity' : 8},
-        {'user_id' : 2, 'title' : '8', 'content' : 'h', 'tag' : 'food', 'created' : datetime(2016, 5, 17), 'popularity' : 7},
-        {'user_id' : 2, 'title' : '9', 'content' : 'i', 'tag' : 'food', 'created' : datetime(2017, 5, 17), 'popularity' : 6},
-        {'user_id' : 2, 'title' : '10', 'content' : 'j', 'tag' : 'travel', 'created' : datetime(2018, 5, 17), 'popularity' : 3},
-        {'user_id' : 2, 'title' : '11', 'content' : 'k', 'tag' : 'games', 'created' : datetime(2019, 5, 17), 'popularity' : 2},
-        {'user_id' : 2, 'title' : '12', 'content' : 'l', 'tag' : 'technology', 'created' : datetime(2020, 5, 17), 'popularity' : 1},
+        {'user_id' : 1,'title' : 'My favourite car', 
+        'content' : 'My favourite car is a Audi Q7 because it\' big and powerful. I love zooming down the motorways.', 'tag' : 'Cars', 'created' : datetime(2010, 5, 17), 'popularity' : 15},
+        {'user_id' : 1, 'title' : 'My hair care routine', 
+        'content' : 'It takes a lot of work to get luscious locks like mine. The secret that you\'re probably missing though is snake oil.', 'tag' : 'Hair Care','created' : datetime(2009,5,17), 'popularity' : 20},
+        {'user_id' : 2, 'title' : 'Science is great', 
+        'content' : 'I think it would be great to see more women in science and other STEM subjects', 'tag' : 'Science', 'created' : datetime(2021, 5, 17), 'popularity' : 100},
+        {'user_id' : 2, 'title' : 'Plutonium is scary', 'content' : 'Watch out for radioactive elements like Plutonium they can make you sick', 'tag' : 'Science', 'created' : datetime(2012, 5, 17), 'popularity' : 13},
+        {'user_id' : 1, 'title' : 'How do you open a can of beans', 'content' : 'I just can seem to get it open no matter how hard I try', 'tag' : 'Science', 'created' : datetime(2013, 5, 17), 'popularity' : 10},
+        {'user_id' : 3, 'title' : 'Dunk School', 'content' : 'When you\'re dunking make sure to get a big run up and crouch low before you jump to get maximum air time to slam it down.', 'tag' : 'Sports', 'created' : datetime(2014, 5, 17), 'popularity' : 9},
+        {'user_id' : 3, 'title' : 'Golden State Warriors for the win', 'content' : 'We are dominating right now. I hope another team can try and challenge us this season.', 'tag' : 'Sports', 'created' : datetime(2015, 5, 17), 'popularity' : 8},
+        {'user_id' : 4, 'title' : 'Welcome to setsuwa', 
+        'content' : 'Hi, welcome to Setsuwa. Please share your whatever you\'d like but keep it clean :)', 'tag' : 'Setsuwa', 'created' : datetime(2020, 5, 17), 'popularity' : 1},
         ]
 
 #user data for seeding
 user_data = [
-    {'username' : 'user', 'password': 'pass', 'moderator' : False},
-    {'username' : 'mod', 'password': '123', 'moderator' : True}
+    {'username' : 'johnny bravo', 'password': 'slick hair', 'moderator' : False},
+    {'username' : 'madamn curie', 'password': 'radiation', 'moderator' : False},
+    {'username' : 'kevin durant', 'password': 'basketball', 'moderator' : False},
+    {'username' : 'admin', 'password': '123456', 'moderator' : True}
 ]
 
 #seed the database

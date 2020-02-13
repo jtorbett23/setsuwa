@@ -59,7 +59,7 @@ export default class Posts extends Component {
 
     render() {
         return (
-            <div>
+            <div id="postsContainer">
                 <p>{this.state.hook === this.state.user_id ? 'Your posts' : 'Posts'}</p>
                 
                 {this.state.hook !== undefined && this.state.hook === this.state.user_id ? null :
