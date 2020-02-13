@@ -47,6 +47,7 @@ export default class SinglePost extends Component {
                     <button onClick={this.editPost.bind(this)}>Edit post</button>
                 </div> 
                 : null}
+                <button>Flag</button>
                 </div> : <p>Post deleted</p>
                 : <p>This post does not exist :L</p>}
                 {this.state.deleted === true ? <Redirect push to="/"/> : null}
