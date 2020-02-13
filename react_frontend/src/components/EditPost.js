@@ -50,9 +50,9 @@ export default class EditPost extends Component {
                 <div>
                     <form onSubmit={this.updateThenRedirect.bind(this)}>
                         <label htmlFor="title">Title</label>
-                        <input type="text" name="title" onChange={this.handleTitle.bind(this)} value={this.state.title} required></input>
+                        <input type="text" name="title" onChange={this.handleTitle.bind(this)} value={this.state.title} required maxlength="80"></input>
                         <label htmlFor="blog">Blog</label>
-                        <input type="text" name="blog" onChange={this.handleBlog.bind(this)} value={this.state.content} required></input>
+                        <input type="text" name="blog" onChange={this.handleBlog.bind(this)} value={this.state.content} required maxlength="500"></input>
                         <label htmlFor="tags">Tag</label>
                         <input type="text" name="tags" onChange={this.handleTags.bind(this)} value={this.state.tag} required></input>
                         <input type="submit" value="Update"></input>

@@ -48,9 +48,9 @@ export default class MakePost extends Component {
             <div>
                 <form onSubmit={this.createThenRedirect.bind(this)}>
                     <label htmlFor="title">Title</label>
-                    <input type="text" name="title" onChange={this.handleTitle.bind(this)} placeholder="type here..." required></input>
+                    <input type="text" name="title" onChange={this.handleTitle.bind(this)} placeholder="type here..." required maxlength="80"></input>
                     <label htmlFor="blog">Blog</label>
-                    <input type="text" name="blog" onChange={this.handleBlog.bind(this)} placeholder="Whatsonn your mind..." required></input>
+                    <input type="text" name="blog" onChange={this.handleBlog.bind(this)} placeholder="Whatsonn your mind..." required maxlength="500"></input>
                     <label htmlFor="tags">Tag</label>
                     <input type="text" name="tags" onChange={this.handleTags.bind(this)} placeholder="tag" required></input>
                     <input type="submit" value="Post"></input>

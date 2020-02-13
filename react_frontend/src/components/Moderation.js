@@ -38,8 +38,8 @@ export default class Moderation extends Component {
         return (
             <div>
             {this.state.user !== null ? <div>
-            {(this.state.user.moderator === true && this.state.flaggedPosts) ?
-                this.state.flaggedPosts.map((post, index) => (
+            {(this.state.user.moderator === true) ?
+                this.state.flaggedPosts.length > 0 ? this.state.flaggedPosts.map((post, index) => (
                     <div key={index}>
                         <h3>{post.title}</h3>
                         <p>{post.content}</p>
@@ -47,8 +47,8 @@ export default class Moderation extends Component {
                         <button id={post.post_id} onClick={this.flagPost.bind(this)}>Approve</button>
                         <button id={post.post_id} onClick={this.deletePost.bind(this)}>Delete post</button>
                     </div>
-                ))
-            : <p>No posts to moderate :P</p>}
+                )) : <p>No posts to moderate :P</p>
+            : null}
             {this.state.reponded === true && <Redirect push to={`/moderation`} />}
             </div> : <p>You cannot access this page</p>}
             </div>
