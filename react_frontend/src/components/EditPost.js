@@ -50,12 +50,14 @@ export default class EditPost extends Component {
                 <div>
                     
                     <form onSubmit={this.updateThenRedirect.bind(this)}>
+
                     <div className="createContainer">
                         <label htmlFor="title">Title:</label>
                         <input type="text" name="title" onChange={this.handleTitle.bind(this)} value={this.state.title} required></input>
                         <label htmlFor="blog">Content:</label>
                         <textarea wrap="hard" id="blog" name="blog" onChange={this.handleBlog.bind(this)} placeholder="What's on your mind..." required value={this.state.content}></textarea>
                         <label htmlFor="tags">Tag:</label>
+
                         <input type="text" name="tags" onChange={this.handleTags.bind(this)} value={this.state.tag} required></input>
                         <input type="submit" className="button" value="Update"></input>
                         </div>

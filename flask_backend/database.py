@@ -11,6 +11,7 @@ parser.add_argument('title')
 parser.add_argument('content')
 parser.add_argument('tag')
 parser.add_argument('filter')
+parser.add_argument('popularity')
 
 class User_Access(Resource):
     # @jwt_required -> commented out for development
@@ -66,7 +67,7 @@ class Post(Resource):
     def put(self):
         data = parser.parse_args()
         try:
-            Blog.edit_by_id(data['post_id'], data['title'], data['content'], data['tag'])
+            Blog.edit_by_id(data['post_id'], data['title'], data['content'], data['tag'], data['popularity'])
             return {"message" : "Post updated",
                     "post_id" : data['post_id']}, 200
         except:
@@ -110,11 +111,12 @@ class Flag(Resource):
         # @jwt_required -> commented out for development
         data = parser.parse_args()
         try:
-            flagged_blogs = Blog.query.filter(Blog.flagged == 1 ).all()
+            flagged_blogs = Blog.query.filter(Blog.flagged == 1).all()
+            print(flagged_blogs)
             blogs_objs = []
             for blog in flagged_blogs:
                 blogs_objs.append(blog.to_object()) 
-                return jsonify(blogs_objs)
+            return jsonify(blogs_objs)
         except:
             return {"message" : "Invalid Route"}, 404
     def put(self):

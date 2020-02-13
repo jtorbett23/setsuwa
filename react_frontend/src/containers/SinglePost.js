@@ -14,6 +14,7 @@ export default class SinglePost extends Component {
     getPost() {
         axios.get(`http://localhost:5000/db/post?post_id=${this.props.id}`)
           .then(res => {
+            axios.put(`http://localhost:5000/db/post?post_id=${res.data.post_id}&title=${res.data.title}&content=${res.data.content}&tag=${res.data.tag}&popularity=${res.data.popularity+1}`)
             this.setState({post: res.data})
           })
     }
@@ -44,22 +45,23 @@ export default class SinglePost extends Component {
         return (
             <div className="postContainer">
                 {this.state.post !== null ? 
-                !this.state.deleted ?
+                !this.state.deleted && this.state.post.flagged === 0 ?
                 <div>
                 <h3>{this.state.post.title}</h3>
                 <p>{this.state.post.content}</p>
                 <p>Tag: {this.state.post.tag}</p>
                 <p>Popularity: {this.state.post.popularity} clicks</p>
                 <p>Created: {this.state.post.created}</p>
+                <p>Written by: {this.state.post.username}</p>
                 {this.state.user_id === this.state.post.user_id ? 
                 <div>
                     <button className="button" onClick={this.deletePost.bind(this)}>Delete post</button>
                     <button className="button" onClick={this.editPost.bind(this)}>Edit post</button>
                 </div> 
                 : null}
-
                 <input type="image"  alt="Siren" src={siren} onClick={this.flagPost.bind(this)}></input>
                 </div> : <p>Post deleted</p>
+
                 : <p>This post does not exist :L</p>}
                 {this.state.deleted === true || this.state.flagged === true ? <Redirect push to="/"/> : null}
                 {this.state.edit === true ? <Redirect push to={`/editpost/${this.state.post.post_id}`}/> : null}
