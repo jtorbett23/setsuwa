@@ -96,6 +96,7 @@ This installs the required packages we need to run the application. We are now r
 Run:
 ```
 cd .\react_frontend\
+npm install
 npm run build
 ```
 Once this has finished
