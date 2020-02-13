@@ -73,9 +73,6 @@ export default class App extends Component {
                           <Link to="/createpost">Create post</Link>
                       </li>
                       <li>
-                          <Link to="/friends">Friends</Link>
-                      </li>
-                      <li>
                           <Link to={`/user/${this.state.user_id}`}>User account</Link>
                       </li>
                       <li>
