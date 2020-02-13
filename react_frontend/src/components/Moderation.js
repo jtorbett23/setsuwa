@@ -38,14 +38,17 @@ export default class Moderation extends Component {
         return (
             <div>
             {this.state.user !== null ? <div>
+
             {(this.state.user.moderator === true) ?
                 this.state.flaggedPosts.length > 0 ? this.state.flaggedPosts.map((post, index) => (
-                    <div key={index}>
-                        <h3>{post.title}</h3>
-                        <p>{post.content}</p>
-                        <p>{post.tag}</p>
-                        <button id={post.post_id} onClick={this.flagPost.bind(this)}>Approve</button>
-                        <button id={post.post_id} onClick={this.deletePost.bind(this)}>Delete post</button>
+                    <div className="postContainer" key={index}>
+                        <h3>Title: {post.title}</h3>
+                        <p>Content: {post.content}</p>
+                        <p>Tag: {post.tag}</p>
+                        <p>Created: {post.created}</p>
+                        <button lassName="button" id={post.post_id} onClick={this.flagPost.bind(this)}>Approve</button>
+                        <button className="button" id={post.post_id} onClick={this.deletePost.bind(this)}>Delete post</button>
+
                     </div>
                 )) : <p>No posts to moderate :P</p>
             : null}

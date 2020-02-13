@@ -48,14 +48,19 @@ export default class EditPost extends Component {
             <div>
                 {this.state.retreived === true && this.state.response.data.user_id === this.state.user_id ? 
                 <div>
+                    
                     <form onSubmit={this.updateThenRedirect.bind(this)}>
-                        <label htmlFor="title">Title</label>
-                        <input type="text" name="title" onChange={this.handleTitle.bind(this)} value={this.state.title} required maxlength="80"></input>
-                        <label htmlFor="blog">Blog</label>
-                        <input type="text" name="blog" onChange={this.handleBlog.bind(this)} value={this.state.content} required maxlength="500"></input>
-                        <label htmlFor="tags">Tag</label>
+
+                    <div className="createContainer">
+                        <label htmlFor="title">Title:</label>
+                        <input type="text" name="title" onChange={this.handleTitle.bind(this)} value={this.state.title} required></input>
+                        <label htmlFor="blog">Content:</label>
+                        <textarea wrap="hard" id="blog" name="blog" onChange={this.handleBlog.bind(this)} placeholder="What's on your mind..." required value={this.state.content}></textarea>
+                        <label htmlFor="tags">Tag:</label>
+
                         <input type="text" name="tags" onChange={this.handleTags.bind(this)} value={this.state.tag} required></input>
-                        <input type="submit" value="Update"></input>
+                        <input type="submit" className="button" value="Update"></input>
+                        </div>
                     </form>
                 </div> : null}
                 {this.state.updated === true ? <Redirect push to={`/post/${this.state.post_id}`}/> : null}

@@ -33,19 +33,22 @@ export default class Register extends Component {
 
     render() {
         return (
-            <div className="Register">
+            <div className="Register"  >
             <form onSubmit={this.handleRegister.bind(this)}>
-                <h4>Register</h4>
+                
+                <h1 className="textCenter">Register</h1>
+                <div className="accountDetailsContainer">
                 <label htmlFor="username">Username</label>
                 <input type="text" name="username" placeholder="username" onChange={this.handleUsername.bind(this)} required></input>
                 <br/>
                 <label htmlFor="password">Password</label>
                 <input type="password" name="password" placeholder="password" onChange={this.handlePassword.bind(this)} required></input>
                 <br/>
-                <input type="submit" value="Register" />
+                <input className="button" type="submit" value="Register" />
+                </div>
             </form>
 
-            {this.state.registerPayload !== null ? this.state.registerPayload.status === 200 ? <Redirect push to="/login"/> : <p id="RegisterMsg">{this.state.registerPayload.data.message}</p> : null}
+            {this.state.registerPayload !== null ? this.state.registerPayload.status === 200 ? <Redirect push to="/login"/> : <p id="RegisterMsg" className="textCenter">{this.state.registerPayload.data.message}</p> : null}
         </div>
         )
     }
