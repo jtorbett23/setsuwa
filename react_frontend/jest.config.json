@@ -1,0 +1,12 @@
+{
+    "setupFiles": [
+        "<rootDir>/tests/setup.js"
+    ],
+    "snapshotSerializers": [
+        "enzyme-to-json/serializer"
+    ],
+    "collectCoverage": true,
+    "moduleNameMapper": {
+        "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js"
+    }
+}
