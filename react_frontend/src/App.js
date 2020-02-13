@@ -14,6 +14,7 @@ import EditPostHookContainer from './containers/EditPostHookContainer'
 import SinglePostHookContainer from './containers/SinglePostHookContainer'
 import UserPage from './containers/UserPage'
 import Posts from './containers/Posts'
+import Moderation from './components/Moderation'
 import './static/css/App.css';
 import logo from './static/logoSmall.png';
 
@@ -24,6 +25,7 @@ export default class App extends Component {
     password: null,
     user: null,
     user_id: null,
+    moderator: false,
     loggedInMessage: false,
     logInMessage: false,
     posts: null,
@@ -41,6 +43,7 @@ export default class App extends Component {
       .then(res => {
           this.setState({user: res.data})
           this.setState({user_id: res.data.user_id})
+          this.setState({moderator: res.data.moderator})
           this.setState({loggedInMessage: "Logged in"})
           this.setState({loggedIn: true})
       })
@@ -74,12 +77,15 @@ export default class App extends Component {
                   {this.state.loggedIn &&
                     <div>
                       <li>
-                          <Link to={`/user/${this.state.user_id}`}>User account</Link>
-                      </li>
-                      <li>
                           <Link to="/createpost">Create post</Link>
                       </li>
-                      
+                      <li>
+                          <Link to={`/user/${this.state.user_id}`}>User account</Link>
+                      </li>
+                      {this.state.moderator &&
+                        <li>
+                          <Link to="/moderation">Moderate</Link>
+                        </li>}
                       <li>
                           <Link onClick={this.logout} id="logout" to="/">Logout</Link>
                       </li>
@@ -108,8 +114,8 @@ export default class App extends Component {
                   <Route path="/register">
                   <Register />
               </Route>
-              <Route path="/users">
-                  {/* <Users /> */}
+              <Route path="/moderation">
+                  <Moderation user={this.state.user}/>
               </Route>
               <Route path="/createpost">
                   <MakePost user_id={this.state.user_id} />

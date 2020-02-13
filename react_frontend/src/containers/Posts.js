@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import Post from '../components/Post'
-import Comments from './Comments'
 
 export default class Posts extends Component {
     state = {
@@ -85,9 +84,8 @@ export default class Posts extends Component {
                 </div>}
 
                 {this.state.posts.map((post, index) => (
-                    <Post key={index} post={post} />
+                    post.flagged === 0 && <Post key={index} post={post} />
                 ))}
-                {/* <Comments /> */}
             </div>
         )
     }
