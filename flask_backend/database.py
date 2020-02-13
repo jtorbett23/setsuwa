@@ -39,8 +39,10 @@ class Post(Resource):
     def get(self):
         data = parser.parse_args() 
         try:
-            return_blog = Blog.find_by_id(data['post_id'])
-            return jsonify(return_blog.to_object())
+            response = db.session.query(Blog, User).outerjoin(User, Blog.user_id == User.user_id).filter(Blog.post_id == data['post_id']).first()
+            blog_obj = response[0].to_object()
+            blog_obj['username'] = response[1].username
+            return jsonify(blog_obj)
         except:
             db.session.close()
             return {"message": "Retrieve post failed"}, 500

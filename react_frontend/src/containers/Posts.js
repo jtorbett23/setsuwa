@@ -60,10 +60,10 @@ export default class Posts extends Component {
     render() {
         return (
             <div id="postsContainer">
-                <p>{this.state.hook === this.state.user_id ? 'Your posts' : 'Posts'}</p>
-                
+                <h1 className="textCenter">{this.state.hook === this.state.user_id ? 'Your posts' : 'Posts'}</h1>
+                <p>{this.state.hook === this.state.user_id ? "You've created no posts :(" : null}</p>
                 {this.state.hook !== undefined && this.state.hook === this.state.user_id ? null :
-                <div>
+                <div id="searchContainer">
                 <p>Search a Category</p>
                   <select onChange={this.handleCategory.bind(this)}>
                     <option value="pop">Popular</option>

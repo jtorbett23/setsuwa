@@ -47,13 +47,15 @@ export default class MakePost extends Component {
         return (
             <div>
                 <form onSubmit={this.createThenRedirect.bind(this)}>
-                    <label htmlFor="title">Title</label>
+                    <div className="createContainer">
+                    <label htmlFor="title">Title:</label>
                     <input type="text" name="title" onChange={this.handleTitle.bind(this)} placeholder="type here..." required></input>
-                    <label htmlFor="blog">Blog</label>
-                    <input type="text" name="blog" onChange={this.handleBlog.bind(this)} placeholder="Whatsonn your mind..." required></input>
-                    <label htmlFor="tags">Tag</label>
+                    <label htmlFor="blog">Content:</label>
+                    <textarea wrap="hard" id="blog" name="blog" onChange={this.handleBlog.bind(this)} placeholder="What's on your mind..." required></textarea>
+                    <label htmlFor="tags">Tag:</label>
                     <input type="text" name="tags" onChange={this.handleTags.bind(this)} placeholder="tag" required></input>
-                    <input type="submit" value="Post"></input>
+                    <input className="button" type="submit" value="Post"></input>
+                    </div>
                 </form>
                 {this.state.errorMSG !== null ? <p>{this.state.errorMSG}</p> : null}
                 {this.state.made === true ? <Redirect push to={`/post/${this.state.post_id}`}/> : null}

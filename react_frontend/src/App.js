@@ -69,13 +69,13 @@ export default class App extends Component {
           <nav>
               <ul>
                   <li>
-                  <Link to="/"> <img src={logo} alt="Logo"/></Link>
+                  <Link to="/"> <img id="logo" src={logo} alt="Logo"/></Link>
                   </li>
                   <li>
                       <Link to="/">Home</Link>
                   </li>
                   {this.state.loggedIn &&
-                    <div>
+                    <div id="loggedInNav">
                       <li>
                           <Link to="/createpost">Create post</Link>
                       </li>
