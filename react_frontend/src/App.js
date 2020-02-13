@@ -12,7 +12,7 @@ import Register from './components/Register'
 import MakePost from './components/MakePost'
 import EditPostHookContainer from './containers/EditPostHookContainer'
 import SinglePostHookContainer from './containers/SinglePostHookContainer'
-import PostsHookContainer from './containers/PostsHookContainer'
+import UserPage from './containers/UserPage'
 import Posts from './containers/Posts'
 import './static/css/App.css';
 
@@ -21,6 +21,7 @@ export default class App extends Component {
     loggedIn: false,
     username: null,
     password: null,
+    user: null,
     user_id: null,
     loggedInMessage: false,
     logInMessage: false,
@@ -37,6 +38,7 @@ export default class App extends Component {
   getID() {
     axios.post(`http://localhost:5000/auth/login?username=${this.state.username}&password=${this.state.password}`)
       .then(res => {
+          this.setState({user: res.data})
           this.setState({user_id: res.data.user_id})
           this.setState({loggedInMessage: "Logged in"})
           this.setState({loggedIn: true})
@@ -74,7 +76,7 @@ export default class App extends Component {
                           <Link to="/friends">Friends</Link>
                       </li>
                       <li>
-                          <Link to="/useraccount">User account</Link>
+                          <Link to={`/user/${this.state.user_id}`}>User account</Link>
                       </li>
                       <li>
                           <Link onClick={this.logout} id="logout" to="/">Logout</Link>
@@ -97,7 +99,7 @@ export default class App extends Component {
                    <SinglePostHookContainer user_id={this.state.user_id} />
               </Route>
               <Route path="/login">
-               {this.state.loggedIn ? <Redirect to={`/${this.state.user_id}`} /> :
+               {this.state.loggedIn ? <Redirect to="/" /> :
                     <Login 
                   handleUsername={this.handleUsername.bind(this)} 
                   handlePassword={this.handlePassword.bind(this)} 
@@ -116,8 +118,8 @@ export default class App extends Component {
               <Route path="/editpost/:id">
                   <EditPostHookContainer user_id={this.state.user_id} />
               </Route>
-              <Route path="/:id">
-                  <PostsHookContainer user_id={this.state.user_id} />
+              <Route path="/user/:id">
+                  <UserPage user_id={this.state.user_id} />
               </Route>
               <Route path="/">
                   <Posts user_id={this.state.user_id} />

@@ -9,12 +9,13 @@ export default class Posts extends Component {
         user_id: this.props.user_id,
         posts: [],
         tags: null,
+        tag: '',
+        category: 'pop',
         comments: null,
-        category: null
     }
 
-    getPosts() {
-        axios.get(`http://localhost:5000/db/posts`)
+    getPosts(category, tag) {
+        axios.get(`http://localhost:5000/db/posts?filter=${category}&tag=${tag}`)
           .then(res => {
             this.setState({posts: res.data})
           })
@@ -27,20 +28,6 @@ export default class Posts extends Component {
         })
     }
 
-    getPostsWithFilter(category) {
-        axios.get(`http://localhost:5000/db/posts?filter=${category}`)
-          .then(res => {
-            this.setState({posts: res.data})
-          })
-    }
-
-    getPostsWithTag(tag) {
-        axios.get(`http://localhost:5000/db/posts?tag=${tag}`)
-          .then(res => {
-            this.setState({posts: res.data})
-          })
-    }
-
     getUserPosts() {
         axios.get(`http://localhost:5000/db/posts?user_id=${this.state.hook}`)
           .then(res => {
@@ -49,27 +36,35 @@ export default class Posts extends Component {
     }
     
     handleCategory (e) {
-      this.getPostsWithFilter(e.target.value)
+      this.setState({category: e.target.value})
+      this.getPosts(e.target.value, this.state.tag)
     }
 
     handleTag (e) {
-      this.getPostsWithTag(e.target.value)
+      this.setState({tag: e.target.value})
+      this.getPosts(this.state.category, e.target.value)
+    }
+
+    handleTagetory (e) {
+      console.log(e.target.value)
     }
 
     componentDidMount() {
         if(this.state.hook !== undefined && this.state.hook === this.state.user_id) {
             this.getUserPosts()
         } else {
-            this.getPosts()
+            this.getPosts(this.state.category, this.state.tag)
+            this.getTags()
         }
-        this.getTags()
     }
 
     render() {
         return (
             <div>
-                <p>Posts page</p>
+                <p>{this.state.hook === this.state.user_id ? 'Your posts' : 'Posts'}</p>
                 
+                {this.state.hook !== undefined && this.state.hook === this.state.user_id ? null :
+                <div>
                 <p>Search a Category</p>
                   <select onChange={this.handleCategory.bind(this)}>
                     <option value="pop">Popular</option>
@@ -78,7 +73,7 @@ export default class Posts extends Component {
                     <option value="old">Old</option>
                   </select>
 
-                <p>Search a Category</p>
+                <p>Search a Tag</p>
                 {this.state.tags !== null ? 
                 <select onChange={this.handleTag.bind(this)}>
                   <option value="">All</option>
@@ -87,6 +82,7 @@ export default class Posts extends Component {
                 ))}
                 </select>
                 : <p>loading categories...</p>}
+                </div>}
 
                 {this.state.posts.map((post, index) => (
                     <Post key={index} post={post} />
