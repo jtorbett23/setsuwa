@@ -112,7 +112,6 @@ class Flag(Resource):
         data = parser.parse_args()
         try:
             flagged_blogs = Blog.query.filter(Blog.flagged == 1).all()
-            print(flagged_blogs)
             blogs_objs = []
             for blog in flagged_blogs:
                 blogs_objs.append(blog.to_object()) 

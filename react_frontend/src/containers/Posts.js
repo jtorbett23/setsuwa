@@ -61,7 +61,6 @@ export default class Posts extends Component {
         return (
             <div id="postsContainer">
                 <h1 className="textCenter">{this.state.hook === this.state.user_id ? 'Your posts' : 'Posts'}</h1>
-                <p>{this.state.hook === this.state.user_id ? "You've created no posts :(" : null}</p>
                 {this.state.hook !== undefined && this.state.hook === this.state.user_id ? null :
                 <div id="searchContainer">
                 <p>Search a Category</p>

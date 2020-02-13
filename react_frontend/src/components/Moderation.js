@@ -46,7 +46,7 @@ export default class Moderation extends Component {
                         <p>Content: {post.content}</p>
                         <p>Tag: {post.tag}</p>
                         <p>Created: {post.created}</p>
-                        <button lassName="button" id={post.post_id} onClick={this.flagPost.bind(this)}>Approve</button>
+                        <button className="button" id={post.post_id} onClick={this.flagPost.bind(this)}>Approve</button>
                         <button className="button" id={post.post_id} onClick={this.deletePost.bind(this)}>Delete post</button>
 
                     </div>
