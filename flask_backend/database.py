@@ -108,11 +108,12 @@ class Flag(Resource):
         # @jwt_required -> commented out for development
         data = parser.parse_args()
         try:
-            flagged_blogs = Blog.query.filter(Blog.flagged == 1 ).all()
+            flagged_blogs = Blog.query.filter(Blog.flagged == 1).all()
+            print(flagged_blogs)
             blogs_objs = []
             for blog in flagged_blogs:
                 blogs_objs.append(blog.to_object()) 
-                return jsonify(blogs_objs)
+            return jsonify(blogs_objs)
         except:
             return {"message" : "Invalid Route"}, 404
     def put(self):
