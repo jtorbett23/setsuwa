@@ -11,6 +11,7 @@ parser.add_argument('title')
 parser.add_argument('content')
 parser.add_argument('tag')
 parser.add_argument('filter')
+parser.add_argument('popularity')
 
 class User_Access(Resource):
     # @jwt_required -> commented out for development
@@ -39,8 +40,10 @@ class Post(Resource):
     def get(self):
         data = parser.parse_args() 
         try:
-            return_blog = Blog.find_by_id(data['post_id'])
-            return jsonify(return_blog.to_object())
+            response = db.session.query(Blog, User).outerjoin(User, Blog.user_id == User.user_id).filter(Blog.post_id == data['post_id']).first()
+            blog_obj = response[0].to_object()
+            blog_obj['username'] = response[1].username
+            return jsonify(blog_obj)
         except:
             db.session.close()
             return {"message": "Retrieve post failed"}, 500
@@ -64,7 +67,7 @@ class Post(Resource):
     def put(self):
         data = parser.parse_args()
         try:
-            Blog.edit_by_id(data['post_id'], data['title'], data['content'], data['tag'])
+            Blog.edit_by_id(data['post_id'], data['title'], data['content'], data['tag'], data['popularity'])
             return {"message" : "Post updated",
                     "post_id" : data['post_id']}, 200
         except:
