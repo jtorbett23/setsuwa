@@ -15,6 +15,7 @@ import SinglePostHookContainer from './containers/SinglePostHookContainer'
 import UserPage from './containers/UserPage'
 import Posts from './containers/Posts'
 import './static/css/App.css';
+import logo from './static/logoSmall.png';
 
 export default class App extends Component {
   state = {
@@ -65,19 +66,20 @@ export default class App extends Component {
           <nav>
               <ul>
                   <li>
+                  <Link to="/"> <img src={logo} alt="Logo"/></Link>
+                  </li>
+                  <li>
                       <Link to="/">Home</Link>
                   </li>
                   {this.state.loggedIn &&
                     <div>
                       <li>
-                          <Link to="/createpost">Create post</Link>
-                      </li>
-                      <li>
-                          <Link to="/friends">Friends</Link>
-                      </li>
-                      <li>
                           <Link to={`/user/${this.state.user_id}`}>User account</Link>
                       </li>
+                      <li>
+                          <Link to="/createpost">Create post</Link>
+                      </li>
+                      
                       <li>
                           <Link onClick={this.logout} id="logout" to="/">Logout</Link>
                       </li>
@@ -85,15 +87,12 @@ export default class App extends Component {
                   }
                   {!this.state.loggedIn &&
                     <li>
-                        <Link id="login" to="/login">Login/Register</Link>
+                        <Link id="login" to="/login">Login / Register</Link>
                     </li>
                   }
               </ul>
-              <p id="loginMsg">{this.state.loggedInMessage !== false ? this.state.loggedInMessage : 'Logged out'}</p>
           </nav>
-
-          <h1>Setsuwa</h1>
-
+          <section id ="page">
           <Switch>
               <Route path="/post/:id">
                    <SinglePostHookContainer user_id={this.state.user_id} />
@@ -125,6 +124,7 @@ export default class App extends Component {
                   <Posts user_id={this.state.user_id} />
               </Route>
           </Switch>
+          </section>
         </div>
       </Router>
     )
