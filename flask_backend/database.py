@@ -112,11 +112,7 @@ class Flag(Resource):
             blogs_objs = []
             for blog in flagged_blogs:
                 blogs_objs.append(blog.to_object()) 
-            if(blogs_objs) :
                 return jsonify(blogs_objs)
-            else:
-                db.session.close()
-                return {"message" : "No posts found"}, 400
         except:
             return {"message" : "Invalid Route"}, 404
     def put(self):
