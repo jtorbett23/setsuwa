@@ -234,7 +234,7 @@ def test_get_all_tags(test_client, init_database):
     assert len(response_array) == 7
 
 def test_valid_toggle_flagged(test_client, init_database):
-    response = test_client.put('/db/flag?post_id=1')
+    response = test_client.put('/db/flag?post_id=3')
     assert response.status_code == 200
     response_obj = json.loads(response.data)
     assert response_obj == {"message" : "Post flag toggled"}
@@ -250,11 +250,3 @@ def test_valid_get_flagged_posts(test_client, init_database):
     assert response.status_code == 200
     response_array = json.loads(response.data)
     assert len(response_array) == 4
-
-def test_invalid_get_flagged_posts(test_client, init_database):
-    #not a moderator
-    response = test_client.get('/db/flag')
-    assert response.status_code == 404
-    response_obj = json.loads(response.data)
-    assert response_obj == {'message': 'Invalid Route'}
-    

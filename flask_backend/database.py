@@ -123,10 +123,10 @@ class Flag(Resource):
         # @jwt_required -> commented out for development
         data = parser.parse_args()
         try:
-                flag_blog = Blog.find_by_id(data['post_id'])
-                flag_blog.flagged = not flag_blog.flagged
-                flag_blog.save_to_db()
-                return {"message" : "Post flag toggled"}, 200
+            flag_blog = Blog.find_by_id(data['post_id'])
+            flag_blog.flagged = not flag_blog.flagged
+            flag_blog.save_to_db()
+            return {"message" : "Post flag toggled"}, 200
         except:
             db.session.close()
             return {"message" : "No page found"}, 404
