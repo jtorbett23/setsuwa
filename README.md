@@ -5,7 +5,7 @@ Setsuwa is a website designed to bring the community together. Here you can shar
 ## User stories:
 
 User stories marked with a * represent stretch goals for this project.
-
+```
 - As a non-logged in user, to register, I want to easily be able to navigate to the register page from the any page
 - As a non-logged in user, to register, I want a fields to enter a (email,) username, password and a submit button
 - As a non-logged in user, to register, I want relevant error messages if my registration is unsuccessful
@@ -47,7 +47,7 @@ User stories marked with a * represent stretch goals for this project.
 - As an admin, to moderate posts, I want to be able to delete posts*
 - As an admin, to moderate posts, I want to be a page to able review flagged posts
 - As an admin, to moderate posts, I want a warning to confirm deleting a post*
-
+```
 ## Technologies used:
 
 * Python
@@ -69,16 +69,16 @@ Honourable mentions:
 This project is soon to be hosted remotely. If you would like to run this project on your machine then follow the instructions bellow.
 
 ### Prerequisites
+
 - Download [Python](https://www.python.org/downloads/ "Python"), follow the link for installation instructions
 - Recommended IDE [VS Code](https://code.visualstudio.com/ "VS Code")
 
 ### Installing
+
 Open the terminal in the project directory and run this command:
 ```
 git clone https://github.com/AaronM97/setsuwa.git
-```
-then 
-```
+
 cd setsuwa
 ```
 Once you are in the project folder that you have pulled, run:
@@ -92,6 +92,17 @@ pip install -r requirements.txt
 This installs the required packages we need to run the application. We are now ready to run the app 
 
 ### Running the project
+
+Run:
+```
+cd .\react_frontend\
+npm install
+npm run build
+```
+Once this has finished
+```
+cd ..
+```
 In the terminal run, if you are on Windows run:
 ```
 $env:FLASK_APP="main.py"

@@ -1,0 +1,11 @@
+html, body, #root, .App {
+  height: 100%;
+  margin: 0;
+  background-color :#898F96;
+  
+}
+
+
+ul {
+  margin-top : 0;
+}
